@@ -20,6 +20,7 @@ class MainActivity : ComponentActivity() {
             MyApplicationTheme {
                 val navHostController = rememberNavController()
                 SetupNavGraph(
+                    lifecycleOwner = this,
                     navHostController = navHostController,
                     mainViewModel = viewModel,
                 )

@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">My Application</string>
     <string name="title_activity_main2">MainActivity2</string>
+    <string name="page_title">Poke-google</string>
+    <string name="generic_error">Something went wrong, please try again later.</string>
+    <string name="no_results">Couldn\'t find any results for %s</string>
+    <string name="search_pokemon">Search Pokemon</string>
 </resources>
