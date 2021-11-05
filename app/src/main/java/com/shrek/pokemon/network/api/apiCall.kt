@@ -13,7 +13,7 @@ suspend fun <T : Any> apiCall(block: NetworkCall<T>): ApiResult<T> {
 
     worker(block,
             { result = result.success(it) },
-            { e, m, endpoint ->
+            { e, m, _ ->
                 result = result.error(e, m)
             }
     )
@@ -34,7 +34,6 @@ private suspend fun <T> worker(
         Log.d(TAG, "request:  ${response.raw().request.body}")
         Log.d(TAG, "response:  ${response.body()}")
 
-
         if (response.isSuccessful) {
             val body = response.body()
 
@@ -46,7 +45,7 @@ private suspend fun <T> worker(
                 if (response.code() == 200) {
                     Log.d(TAG, "empty body on 200 response")
                 }
-                onFailure(ApiError("internal", "Unexpected response from server", response.code()), "Unexpected response", endPoint)
+                onFailure(ApiError(ApiError.ErrorProp("Unexpected response from server", response.code())), "Unexpected response", endPoint)
             }
 
         } else {
@@ -54,26 +53,34 @@ private suspend fun <T> worker(
 
             var errorMsg = "Something went wrong"
             try {
-                val error = retrofitGson.fromJson(response.errorBody()?.charStream(), ApiError::class.java)
-                error.httpCode = response.code()
-                Log.d(TAG, "api error $error")
+                val apiError = retrofitGson.fromJson(response.errorBody()?.charStream(), ApiError::class.java)
+                apiError.error.code = response.code()
+                Log.d(TAG, "api error $apiError")
 
-                if (error.httpCode in 400..499) {
-                    onFailure(error, error.msg, endPoint)
+                if (apiError.error.code in 400..499) {
+                    onFailure(apiError, apiError.error.message, endPoint)
                 } else {
                     // mask non-client error messages
-                    onFailure(error, errorMsg, endPoint)
+                    onFailure(apiError, errorMsg, endPoint)
                 }
 
             } catch (t: Throwable) {
                 Log.w(TAG, "error in parsing error response to ApiError", t)
                 errorMsg = response.message() ?: errorMsg
-                onFailure(ApiError("internal", errorMsg, response.code()), errorMsg, endPoint)
+                onFailure(
+                    ApiError(ApiError.ErrorProp(errorMsg, response.code())),
+                    errorMsg,
+                    endPoint
+                )
             }
         }
     } catch (e: Throwable) {
         Log.e(TAG, "error", e)
-        onFailure(ApiError("", "", 0), "Something went wrong. Please check your connection and try again", "")
+        onFailure(
+            ApiError(ApiError.ErrorProp("", 0)),
+            "Something went wrong. Please check your connection and try again",
+            ""
+        )
     }
 
 }

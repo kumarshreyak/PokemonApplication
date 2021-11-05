@@ -16,13 +16,11 @@ import kotlinx.coroutines.flow.debounce
 class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
 
-    val enteredSearchText = MutableLiveData("")
-//    val searchText = enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS)
+    val enteredSearchText = MutableLiveData<String>("")
     val getShakespeareTextResponse = mutableStateOf(ApiResult<GetShakespeareTextResponse>())
 
     suspend fun getShakespeareText(text: String) {
-        val response = mainRepository.getShakespeareText(GetShakespeareTextRequest(text = text))
-        getShakespeareTextResponse.value = response
+        getShakespeareTextResponse.value = mainRepository.getShakespeareText(GetShakespeareTextRequest(text = text))
     }
 
     class Factory(private val mainRepository: MainRepository) : ViewModelProvider.NewInstanceFactory() {

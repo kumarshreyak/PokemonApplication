@@ -11,15 +11,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asFlow
 import com.shrek.pokemon.MainViewModel
 import com.shrek.pokemon.R
 import com.shrek.pokemon.network.api.ApiResult
 import com.shrek.pokemon.network.data.request.GetShakespeareTextResponse
-import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
-import kotlinx.coroutines.launch
 
 val DELAY_SEARCH_IN_MILLIS = 300L
 
@@ -30,11 +27,18 @@ fun MainScreen(
 ) {
     val scope = rememberCoroutineScope() // Use to make API call during retry.
     val response by mainViewModel.getShakespeareTextResponse
-    val searchText by mainViewModel.enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS).collectAsState("")
 
-    LaunchedEffect(key1 = searchText) {
-        mainViewModel.getShakespeareText(text = searchText)
-    }
+    // FIXME - Add debounce/throttle in search
+//    val searchText by mainViewModel.enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS)
+//        .collectAsState(response.result?.contents?.text ?: "")
+
+    val searchText by mainViewModel.enteredSearchText.observeAsState()
+
+    if(!searchText.isNullOrBlank())
+        LaunchedEffect(key1 = searchText) {
+            mainViewModel.getShakespeareText(text = searchText!!)
+        }
+
     Content(
         response = response,
         onSearch = {
@@ -49,12 +53,15 @@ fun Content(response: ApiResult<GetShakespeareTextResponse>, onSearch: (String) 
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+        Column(modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)) {
+
             Spacer(modifier = Modifier.size(16.dp))
 
             // Page Title
             Text(
-                style = MaterialTheme.typography.h3,
+                style = MaterialTheme.typography.h4,
                 text = stringResource(R.string.page_title),
                 modifier = Modifier.align(Alignment.CenterHorizontally)
             )
@@ -62,10 +69,11 @@ fun Content(response: ApiResult<GetShakespeareTextResponse>, onSearch: (String) 
             Spacer(modifier = Modifier.size(16.dp))
 
             // Text input field
-            var enteredText by rememberSaveable { mutableStateOf("") }
+            var enteredText by rememberSaveable { mutableStateOf(response.result?.contents?.text ?: "") }
             var errorText by rememberSaveable { mutableStateOf("") }
             TextField(
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
                     .align(alignment = Alignment.CenterHorizontally),
                 value = enteredText,
                 onValueChange = {
