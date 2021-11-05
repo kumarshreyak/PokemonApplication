@@ -9,6 +9,10 @@ import com.shrek.pokemon.network.data.response.*
 object MainRepository {
 
     suspend fun getPokemon(request: GetPokemonRequest) : ApiResult<GetPokemonResponse> {
-        return apiCall { ShrekAPI.mainInterface.getPokemon(getPokemonRequest = request) }
+        return apiCall { ShrekAPI.mainInterface.getPokemon(request = request) }
+    }
+
+    suspend fun getShakespeareText(request: GetShakespeareTextRequest) : ApiResult<GetShakespeareTextResponse> {
+        return apiCall { ShrekAPI.mainInterface.getShakespeareText(request = request) }
     }
 }

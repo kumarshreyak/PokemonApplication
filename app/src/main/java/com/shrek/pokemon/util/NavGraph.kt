@@ -13,6 +13,6 @@ fun SetupNavGraph(
     mainViewModel: MainViewModel
 ) {
     NavHost(navController = navHostController, startDestination = "main") {
-        composable("main") { MainScreen() }
+        composable("main") { MainScreen(mainViewModel) }
     }
 }

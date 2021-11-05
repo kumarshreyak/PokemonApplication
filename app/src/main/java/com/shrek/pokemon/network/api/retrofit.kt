@@ -16,11 +16,6 @@ private val gsonConverterFactory by lazy {
     GsonConverterFactory.create(retrofitGson)
 }
 
-private const val SERVER_URL_KEY = "server_url"
-private const val QA_SERVER_URL_KEY = "qa_server_url"
-
-private val API_BASE_URL: String = "something"
-
 val TIMEOUT = 10L // 10s for now
 
 private val okHttpClient: OkHttpClient by lazy {
@@ -51,11 +46,11 @@ private val userAuthInterceptor by lazy {
 val retrofit: Retrofit by lazy {
     Retrofit.Builder()
             .client(okHttpClient)
-            .baseUrl(API_BASE_URL)
             .addConverterFactory(gsonConverterFactory)
+            .baseUrl("https://api.funtranslations.com/")
             .build()
             .also {
-                Log.d("ShrekAPI", "created retrofit instance. baseUrl=$API_BASE_URL")
+                Log.d("ShrekAPI", "created retrofit instance.")
             }
 }
 
