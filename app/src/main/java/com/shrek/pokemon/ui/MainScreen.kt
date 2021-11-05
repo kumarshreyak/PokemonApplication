@@ -49,7 +49,9 @@ fun Content(response: ApiResult<GetShakespeareTextResponse>, onSearch: (String) 
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
     ) {
-        Column(modifier = Modifier.fillMaxWidth()) {
+        Column(modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp)) {
+            Spacer(modifier = Modifier.size(16.dp))
+
             // Page Title
             Text(
                 style = MaterialTheme.typography.h3,
@@ -63,7 +65,7 @@ fun Content(response: ApiResult<GetShakespeareTextResponse>, onSearch: (String) 
             var enteredText by rememberSaveable { mutableStateOf("") }
             var errorText by rememberSaveable { mutableStateOf("") }
             TextField(
-                modifier = Modifier.padding(horizontal = 16.dp)
+                modifier = Modifier.fillMaxWidth()
                     .align(alignment = Alignment.CenterHorizontally),
                 value = enteredText,
                 onValueChange = {
@@ -80,19 +82,23 @@ fun Content(response: ApiResult<GetShakespeareTextResponse>, onSearch: (String) 
             // Helper text if error exists
             if(errorText.isNotBlank())
                 Text(
+                    modifier = Modifier.fillMaxWidth(),
                     text = errorText,
                     color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
                     style = MaterialTheme.typography.caption,
-                    modifier = Modifier.padding(horizontal = 16.dp),
                 )
 
             Spacer(modifier = Modifier.size(16.dp))
 
+            // FIXME - Progress state doesn't show when search text gets updated.
             // Search Result Section
             when {
-                response.isInProgress() -> CircularProgressIndicator(color = MaterialTheme.colors.primary)
+                response.isInProgress() -> CircularProgressIndicator(
+                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                    color = MaterialTheme.colors.primary
+                )
                 response.isSuccess() && response.result != null -> ResultSection(response.result)
-                response.isError() -> ShowRetryScreen(message = response.errorMessage ?: "")
+                response.isError() -> ShowRetryScreen(message = response.errorMessage)
             }
         }
     }
@@ -103,18 +109,18 @@ fun ResultSection(response: GetShakespeareTextResponse) {
     if(response.contents?.translated.isNullOrBlank()) {
         // No Search results text
         Text(
+            modifier = Modifier.fillMaxWidth(),
             text = stringResource(id = R.string.no_results, response.contents?.text ?: "entered text"),
             color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(horizontal = 16.dp),
         )
     } else {
         // Search result
         Text(
+            modifier = Modifier.fillMaxWidth(),
             text = response.contents?.translated!!,
             color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
             style = MaterialTheme.typography.subtitle1,
-            modifier = Modifier.padding(horizontal = 16.dp),
         )
     }
 }
@@ -132,6 +138,11 @@ fun validate(enteredText: String, showBlankError: Boolean = false): String {
 }
 
 @Composable
-fun ShowRetryScreen(message: String) {
-    Text(text = message)
+fun ShowRetryScreen(message: String?) {
+    Text(
+        text = if(message.isNullOrBlank()) stringResource(id = R.string.generic_error) else message,
+        color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+        style = MaterialTheme.typography.subtitle1,
+        modifier = Modifier.fillMaxWidth()
+    )
 }
