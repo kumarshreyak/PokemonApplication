@@ -17,6 +17,6 @@ class Injector(context: Context) {
     private val mainRepository by lazy { MainRepository }
 
     fun provideMainViewModel(): MainViewModel.Factory {
-        return MainViewModel.Factory()
+        return MainViewModel.Factory(mainRepository)
     }
 }
