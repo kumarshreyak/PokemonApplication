@@ -1,6 +1,4 @@
-package com.shrek.pokemonlibrary.network.data.response
-
-import com.shrek.pokemonlibrary.client.PokemonClient
+package com.shrek.pokemonlibrary.network.data.models
 
 data class GetPokemonResponse (
     var id : Int,

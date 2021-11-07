@@ -1,7 +1,9 @@
 package com.shrek.pokemonlibrary.network.service
 
-import com.shrek.pokemonlibrary.network.data.request.*
-import com.shrek.pokemonlibrary.network.data.response.*
+import com.shrek.pokemonlibrary.network.data.models.GetPokemonResponse
+import com.shrek.pokemonlibrary.network.data.models.GetPokemonSpeciesResponse
+import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextRequest
+import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextResponse
 import retrofit2.Response
 import retrofit2.http.*
 

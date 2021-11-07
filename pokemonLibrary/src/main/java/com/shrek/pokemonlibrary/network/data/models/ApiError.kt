@@ -7,6 +7,14 @@ data class ApiError(val error: ErrorProp) : Throwable() {
     )
 }
 
+fun Throwable.toPokemonError() : PokemonError {
+    return if(this is ApiError) {
+        PokemonError(errorMessage = error.message, httpFailureCode = error.code)
+    } else {
+        PokemonError(errorMessage = message)
+    }
+}
+
 /**
  *
  "error": {

@@ -1,4 +1,4 @@
-package com.shrek.pokemonlibrary.network.data.request
+package com.shrek.pokemonlibrary.network.data.models
 
 data class GetPokemonSpeciesResponse (
     var id : Int,
@@ -6,7 +6,7 @@ data class GetPokemonSpeciesResponse (
     var flavorTextEntries : List<FlavorTextEntries>,
 ) {
     companion object {
-        const val LANGUAGE_ENGLISH = "english"
+        const val LANGUAGE_ENGLISH = "en"
     }
 }
 

@@ -4,13 +4,10 @@ import android.content.Context
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.shrek.pokemonlibrary.network.api.ResultState
-import com.shrek.pokemonlibrary.network.data.models.Pokemon
-import com.shrek.pokemonlibrary.network.data.models.PokemonApiResult
-import com.shrek.pokemonlibrary.network.data.models.PokemonError
-import com.shrek.pokemonlibrary.network.data.request.GetShakespeareTextRequest
-import com.shrek.pokemonlibrary.network.data.request.getEnglishDescription
-import com.shrek.pokemonlibrary.network.data.response.getInvalidText
-import com.shrek.pokemonlibrary.network.data.response.isValid
+import com.shrek.pokemonlibrary.network.data.models.*
+import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextRequest
+import com.shrek.pokemonlibrary.network.data.models.getEnglishDescription
+import com.shrek.pokemonlibrary.network.data.models.isValid
 import com.shrek.pokemonlibrary.network.repository.MainRepository
 
 class PokemonClient internal constructor(
@@ -26,10 +23,10 @@ class PokemonClient internal constructor(
         _searchResult.value = PokemonApiResult()
         fetchPokemon(
             searchText = searchText,
-            onError = { pokemonError ->
+            onError = { apiError ->
                 _searchResult.value = PokemonApiResult().apply {
                     resultState = ResultState.ERROR
-                    error = pokemonError
+                    error = apiError?.toPokemonError()
                 }
             },
             onSuccess = { pokemon ->
@@ -45,36 +42,36 @@ class PokemonClient internal constructor(
 
     private suspend fun fetchPokemon(
         searchText: String,
-        onError: ((pokemonError: PokemonError) -> Unit)? = null,
+        onError: ((pokemonError: Throwable?) -> Unit)? = null,
         onSuccess: (pokemon: Pokemon) -> Unit
     ) {
         val pokemonResponse = MainRepository.getPokemon(searchText)
         when {
             pokemonResponse.isSuccess() -> {
-                if(pokemonResponse.result?.isValid() == false) {
+                if(pokemonResponse.result?.isValid() == true) {
                     val species = pokemonResponse.result.species?.name!!
                     val imgUrl = pokemonResponse.result.sprites?.frontDefault!!
                     fetchPokemonSpecies(species = species, onError = onError) {
                         onSuccess(
-                            Pokemon(
-                            name = pokemonResponse.result.name,
-                            description = it,
-                            imgUrl = imgUrl
-                        )
+                                Pokemon(
+                                name = pokemonResponse.result.name,
+                                description = it,
+                                imgUrl = imgUrl
+                            )
                         )
                     }
                 } else {
-                    onError?.invoke(PokemonError(errorMessage = pokemonResponse.result?.getInvalidText()))
+                    onError?.invoke(Throwable("Species/Image of pokemon not found"))
                 }
             }
-            pokemonResponse.isError() -> onError?.invoke(PokemonError(errorMessage = pokemonResponse.errorMessage)) // TODO add http error code here
+            pokemonResponse.isError() -> onError?.invoke(pokemonResponse.error)
             else -> Unit
         }
     }
 
     private suspend fun fetchPokemonSpecies(
         species: String,
-        onError: ((pokemonError: PokemonError) -> Unit)? = null,
+        onError: ((error: Throwable?) -> Unit)? = null,
         onSuccess: (translatedDescription: String) -> Unit,
     ) {
         val pokemonSpeciesResponse = MainRepository.getPokemonSpecies(species)
@@ -84,10 +81,10 @@ class PokemonClient internal constructor(
                     val englishDescription = pokemonSpeciesResponse.result?.getEnglishDescription()!!
                      fetchShakespeareDescription(text = englishDescription, onSuccess = onSuccess, onError = onError)
                 } else {
-                    onError?.invoke(PokemonError(errorMessage = "No description found for Pokemon")) // TODO maybe add better error message here
+                    onError?.invoke(Throwable("No description found for Pokemon"))
                 }
             }
-            pokemonSpeciesResponse.isError() -> onError?.invoke(PokemonError(errorMessage = pokemonSpeciesResponse.errorMessage))
+            pokemonSpeciesResponse.isError() -> onError?.invoke(pokemonSpeciesResponse.error)
             else -> Unit
         }
     }
@@ -95,19 +92,19 @@ class PokemonClient internal constructor(
     private suspend fun fetchShakespeareDescription(
         text: String,
         onSuccess: (description: String) -> Unit,
-        onError: ((pokemonError: PokemonError) -> Unit)? = null,
+        onError: ((error: Throwable?) -> Unit)? = null,
     ) {
         val response = MainRepository.getShakespeareText(GetShakespeareTextRequest(text = text))
         when {
             response.isSuccess() -> {
                 val translatedText = response.result?.contents?.translated
                 if(translatedText.isNullOrBlank()) {
-                    onError?.invoke(PokemonError(errorMessage = "No translation found for description of Pokemon"))
+                    onError?.invoke(Throwable("No translation found for description of Pokemon"))
                 } else {
                     onSuccess(translatedText)
                 }
             }
-            response.isError() -> onError?.invoke(PokemonError(errorMessage = response.errorMessage))
+            response.isError() -> onError?.invoke(Throwable(response.error))
             else -> Unit
         }
     }

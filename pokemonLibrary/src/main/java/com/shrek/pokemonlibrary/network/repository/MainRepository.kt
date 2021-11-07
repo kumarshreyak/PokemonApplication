@@ -3,8 +3,10 @@ package com.shrek.pokemonlibrary.network.repository
 import com.shrek.pokemonlibrary.network.ShrekAPI
 import com.shrek.pokemonlibrary.network.api.ApiResult
 import com.shrek.pokemonlibrary.network.api.apiCall
-import com.shrek.pokemonlibrary.network.data.request.*
-import com.shrek.pokemonlibrary.network.data.response.*
+import com.shrek.pokemonlibrary.network.data.models.GetPokemonResponse
+import com.shrek.pokemonlibrary.network.data.models.GetPokemonSpeciesResponse
+import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextRequest
+import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextResponse
 
 object MainRepository {
 

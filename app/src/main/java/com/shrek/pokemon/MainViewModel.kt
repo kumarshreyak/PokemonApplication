@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.shrek.pokemon.network.repository.MainRepository
 import com.shrek.pokemonlibrary.client.PokemonClient
-import com.shrek.pokemonlibrary.network.data.models.PokemonApiResult
 
 class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
