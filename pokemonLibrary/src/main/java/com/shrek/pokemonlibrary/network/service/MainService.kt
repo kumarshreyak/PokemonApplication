@@ -9,11 +9,15 @@ interface MainService {
     @GET
     suspend fun getPokemon(
         @Url url: String,
-    ) : Response<GetPokemonResponse>
+        @Query("limit") limit: Int = 100,
+        @Query("offset") offset: Int = 0,
+    ) : Response<Any>
 
     @GET
     suspend fun getPokemonSpecies(
         @Url url: String,
+        @Query("limit") limit: Int = 0,
+        @Query("offset") offset: Int = 0,
     ) : Response<GetPokemonSpeciesResponse>
 
     @POST

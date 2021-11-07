@@ -108,7 +108,10 @@ fun Content(response: PokemonApiResult?, onSearch: (String) -> Unit) {
                     color = MaterialTheme.colors.primary
                 )
                 response.isSuccess() && response.result != null -> ResultSection(response.result)
-                response.isError() -> ShowRetryScreen(message = response.error?.errorMessage)
+                response.isError() -> {
+                    if(response.error?.httpFailureCode == 404) NoResultsText() // Result not found
+                    else ShowRetryScreen(message = response.error?.errorMessage) // Retryable error
+                }
             }
         }
     }
@@ -118,13 +121,7 @@ fun Content(response: PokemonApiResult?, onSearch: (String) -> Unit) {
 fun ResultSection(response: Pokemon?) {
     Column(modifier = Modifier.fillMaxWidth()) {
         if(response == null) {
-            // No Search results text
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = stringResource(id = R.string.no_results, response?.name ?: "entered text"),
-                color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-                style = MaterialTheme.typography.subtitle1,
-            )
+            NoResultsText(response?.name)
         } else {
             Image(
                 painter = rememberImagePainter(data = response.imgUrl),
@@ -143,6 +140,17 @@ fun ResultSection(response: Pokemon?) {
             )
         }
     }
+}
+
+@Composable
+fun NoResultsText(searchText: String? = null) {
+    // No Search results text
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = stringResource(id = R.string.no_results, searchText ?: "your search"),
+        color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+        style = MaterialTheme.typography.subtitle1,
+    )
 }
 
 /**

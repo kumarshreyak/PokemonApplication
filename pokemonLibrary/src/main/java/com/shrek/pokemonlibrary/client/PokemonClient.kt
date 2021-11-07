@@ -7,6 +7,7 @@ import com.shrek.pokemonlibrary.network.api.ResultState
 import com.shrek.pokemonlibrary.network.data.models.Pokemon
 import com.shrek.pokemonlibrary.network.data.models.PokemonApiResult
 import com.shrek.pokemonlibrary.network.data.models.PokemonError
+import com.shrek.pokemonlibrary.network.data.models.toPokemonError
 import com.shrek.pokemonlibrary.network.data.request.GetShakespeareTextRequest
 import com.shrek.pokemonlibrary.network.data.request.getEnglishDescription
 import com.shrek.pokemonlibrary.network.data.response.getInvalidText
@@ -26,10 +27,10 @@ class PokemonClient internal constructor(
         _searchResult.value = PokemonApiResult()
         fetchPokemon(
             searchText = searchText,
-            onError = { pokemonError ->
+            onError = { apiError ->
                 _searchResult.value = PokemonApiResult().apply {
                     resultState = ResultState.ERROR
-                    error = pokemonError
+                    error = apiError?.toPokemonError()
                 }
             },
             onSuccess = { pokemon ->
@@ -45,7 +46,7 @@ class PokemonClient internal constructor(
 
     private suspend fun fetchPokemon(
         searchText: String,
-        onError: ((pokemonError: PokemonError) -> Unit)? = null,
+        onError: ((pokemonError: Throwable?) -> Unit)? = null,
         onSuccess: (pokemon: Pokemon) -> Unit
     ) {
         val pokemonResponse = MainRepository.getPokemon(searchText)
@@ -54,20 +55,20 @@ class PokemonClient internal constructor(
                 if(pokemonResponse.result?.isValid() == false) {
                     val species = pokemonResponse.result.species?.name!!
                     val imgUrl = pokemonResponse.result.sprites?.frontDefault!!
-                    fetchPokemonSpecies(species = species, onError = onError) {
-                        onSuccess(
-                            Pokemon(
-                            name = pokemonResponse.result.name,
-                            description = it,
-                            imgUrl = imgUrl
-                        )
-                        )
-                    }
+//                    fetchPokemonSpecies(species = species, onError = onError) {
+//                        onSuccess(
+//                            Pokemon(
+//                            name = pokemonResponse.result.name,
+//                            description = it,
+//                            imgUrl = imgUrl
+//                        )
+//                        )
+//                    }
                 } else {
-                    onError?.invoke(PokemonError(errorMessage = pokemonResponse.result?.getInvalidText()))
+                    onError?.invoke(pokemonResponse.error)
                 }
             }
-            pokemonResponse.isError() -> onError?.invoke(PokemonError(errorMessage = pokemonResponse.errorMessage)) // TODO add http error code here
+            pokemonResponse.isError() -> onError?.invoke(pokemonResponse.error)
             else -> Unit
         }
     }
