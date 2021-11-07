@@ -1,4 +1,4 @@
-package com.shrek.pokemon.network.data.request
+package com.shrek.pokemonlibrary.network.data.models
 
 class GetShakespeareTextResponse(
     val success : SuccessProps?,
