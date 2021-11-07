@@ -8,14 +8,12 @@ import retrofit2.http.*
 interface MainService {
     @GET
     suspend fun getPokemon(
-        name: String,
-        @Url url: String = "https://pokeapi.co/api/v2/pokemon/$name",
+        @Url url: String,
     ) : Response<GetPokemonResponse>
 
     @GET
     suspend fun getPokemonSpecies(
-        species: String,
-        @Url url: String = "https://pokeapi.co/api/v2/pokemon-species/$species",
+        @Url url: String,
     ) : Response<GetPokemonSpeciesResponse>
 
     @POST

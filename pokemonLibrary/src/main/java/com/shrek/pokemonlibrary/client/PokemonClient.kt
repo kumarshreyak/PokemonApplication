@@ -1,8 +1,12 @@
 package com.shrek.pokemonlibrary.client
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.shrek.pokemonlibrary.network.api.ResultState
+import com.shrek.pokemonlibrary.network.data.models.Pokemon
+import com.shrek.pokemonlibrary.network.data.models.PokemonApiResult
+import com.shrek.pokemonlibrary.network.data.models.PokemonError
 import com.shrek.pokemonlibrary.network.data.request.GetShakespeareTextRequest
 import com.shrek.pokemonlibrary.network.data.request.getEnglishDescription
 import com.shrek.pokemonlibrary.network.data.response.getInvalidText
@@ -15,24 +19,27 @@ class PokemonClient internal constructor(
     private var logLevel: PokemonClientLogLevel
 ) {
 
-    suspend fun searchPokemon(searchText: String) : MutableLiveData<PokemonApiResult> {
-        val searchResult = MutableLiveData<PokemonApiResult>()
+    private val _searchResult = MutableLiveData(PokemonApiResult())
+    val pokemonSearchResult: LiveData<PokemonApiResult> = _searchResult
+
+    suspend fun searchPokemon(searchText: String) : LiveData<PokemonApiResult> {
+        _searchResult.value = PokemonApiResult()
         fetchPokemon(
             searchText = searchText,
             onError = { pokemonError ->
-                searchResult.value = PokemonApiResult().apply {
+                _searchResult.value = PokemonApiResult().apply {
                     resultState = ResultState.ERROR
                     error = pokemonError
                 }
             },
             onSuccess = { pokemon ->
-                searchResult.value = PokemonApiResult().apply {
+                _searchResult.value = PokemonApiResult().apply {
                     resultState = ResultState.SUCCESS
                     result = pokemon
                 }
             },
         )
-        return searchResult
+        return pokemonSearchResult
     }
 
 
@@ -48,11 +55,13 @@ class PokemonClient internal constructor(
                     val species = pokemonResponse.result.species?.name!!
                     val imgUrl = pokemonResponse.result.sprites?.frontDefault!!
                     fetchPokemonSpecies(species = species, onError = onError) {
-                        onSuccess(Pokemon(
+                        onSuccess(
+                            Pokemon(
                             name = pokemonResponse.result.name,
                             description = it,
                             imgUrl = imgUrl
-                        ))
+                        )
+                        )
                     }
                 } else {
                     onError?.invoke(PokemonError(errorMessage = pokemonResponse.result?.getInvalidText()))
@@ -102,23 +111,6 @@ class PokemonClient internal constructor(
             else -> Unit
         }
     }
-
-    data class PokemonApiResult(
-        var resultState: ResultState = ResultState.IN_PROGRESS,
-        var error: PokemonError? = null,
-        var result: Pokemon? = null,
-    )
-
-    data class Pokemon(
-        val name: String,
-        val description: String,
-        val imgUrl: String,
-    )
-
-    data class PokemonError(
-        val errorMessage: String?,
-        val httpFailureCode: Int? = null,
-    )
 
 
     /**

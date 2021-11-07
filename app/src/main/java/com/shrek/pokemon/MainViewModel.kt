@@ -1,26 +1,22 @@
 package com.shrek.pokemon
 
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.asFlow
-import com.shrek.pokemon.network.api.ApiResult
-import com.shrek.pokemon.network.data.request.GetShakespeareTextRequest
-import com.shrek.pokemon.network.data.request.GetShakespeareTextResponse
 import com.shrek.pokemon.network.repository.MainRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.debounce
+import com.shrek.pokemonlibrary.client.PokemonClient
+import com.shrek.pokemonlibrary.network.data.models.PokemonApiResult
 
 class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
 
     val enteredSearchText = MutableLiveData<String>("")
-    val getShakespeareTextResponse = mutableStateOf(ApiResult<GetShakespeareTextResponse>())
 
-    suspend fun getShakespeareText(text: String) {
-        getShakespeareTextResponse.value = mainRepository.getShakespeareText(GetShakespeareTextRequest(text = text))
+    val searchResult = PokemonClient.instance().pokemonSearchResult
+    suspend fun searchPokemon(searchText: String) {
+        PokemonClient.instance().searchPokemon(searchText = searchText)
     }
 
     class Factory(private val mainRepository: MainRepository) : ViewModelProvider.NewInstanceFactory() {
