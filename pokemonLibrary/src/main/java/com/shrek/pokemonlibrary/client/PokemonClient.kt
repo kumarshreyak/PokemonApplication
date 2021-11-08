@@ -16,24 +16,27 @@ class PokemonClient internal constructor(
     private var logLevel: PokemonClientLogLevel
 ) {
 
-    suspend fun searchPokemon(searchText: String) : PokemonApiResult {
-        val final = PokemonApiResult()
+    private val _searchResult = MutableLiveData(PokemonApiResult())
+    val pokemonSearchResult: LiveData<PokemonApiResult> = _searchResult
+
+    suspend fun searchPokemon(searchText: String) : LiveData<PokemonApiResult> {
+        _searchResult.value = PokemonApiResult()
         fetchPokemon(
             searchText = searchText,
             onError = { apiError ->
-                final.apply {
+                _searchResult.value = PokemonApiResult().apply {
                     resultState = ResultState.ERROR
                     error = apiError?.toPokemonError()
                 }
             },
             onSuccess = { pokemon ->
-                final.apply {
+                _searchResult.value = PokemonApiResult().apply {
                     resultState = ResultState.SUCCESS
                     result = pokemon
                 }
             },
         )
-        return final
+        return pokemonSearchResult
     }
 
 
