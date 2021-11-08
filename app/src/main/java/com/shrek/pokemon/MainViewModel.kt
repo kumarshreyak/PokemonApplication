@@ -1,7 +1,5 @@
 package com.shrek.pokemon
 
-import androidx.compose.runtime.mutableStateOf
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -11,11 +9,11 @@ import com.shrek.pokemonlibrary.client.PokemonClient
 class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
 
-    val enteredSearchText = MutableLiveData<String>("")
+    val enteredSearchText = MutableLiveData("")
 
     val searchResult = PokemonClient.instance().pokemonSearchResult
-    suspend fun searchPokemon(searchText: String) {
-        PokemonClient.instance().searchPokemon(searchText = searchText)
+    fun searchPokemon(searchText: String) {
+        PokemonClient.instance().searchPokemon(text = searchText)
     }
 
     class Factory(private val mainRepository: MainRepository) : ViewModelProvider.NewInstanceFactory() {

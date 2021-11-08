@@ -9,6 +9,10 @@ import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextRequest
 import com.shrek.pokemonlibrary.network.data.models.getEnglishDescription
 import com.shrek.pokemonlibrary.network.data.models.isValid
 import com.shrek.pokemonlibrary.network.repository.MainRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PokemonClient internal constructor(
     private val sdkKey: String,
@@ -19,24 +23,30 @@ class PokemonClient internal constructor(
     private val _searchResult = MutableLiveData(PokemonApiResult())
     val pokemonSearchResult: LiveData<PokemonApiResult> = _searchResult
 
-    suspend fun searchPokemon(searchText: String) : LiveData<PokemonApiResult> {
+    fun searchPokemon(text: String) : LiveData<PokemonApiResult> {
         _searchResult.value = PokemonApiResult()
-        fetchPokemon(
-            searchText = searchText,
-            onError = { apiError ->
-                _searchResult.value = PokemonApiResult().apply {
-                    resultState = ResultState.ERROR
-                    error = apiError?.toPokemonError()
-                }
-            },
-            onSuccess = { pokemon ->
-                _searchResult.value = PokemonApiResult().apply {
-                    resultState = ResultState.SUCCESS
-                    result = pokemon
-                }
-            },
-        )
-        return pokemonSearchResult
+        CoroutineScope(Dispatchers.IO).launch {
+            fetchPokemon(
+                searchText = text,
+                onError = { apiError ->
+                    this.launch(context = Dispatchers.Main) {
+                        _searchResult.value = PokemonApiResult().apply {
+                            resultState = ResultState.ERROR
+                            error = apiError?.toPokemonError()
+                        }
+                    }
+                },
+                onSuccess = { pokemon ->
+                    this.launch(context = Dispatchers.Main) {
+                        _searchResult.value = PokemonApiResult().apply {
+                            resultState = ResultState.SUCCESS
+                            result = pokemon
+                        }
+                    }
+                },
+            )
+        }
+        return _searchResult
     }
 
 

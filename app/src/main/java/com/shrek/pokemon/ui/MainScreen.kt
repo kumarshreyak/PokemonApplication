@@ -1,5 +1,6 @@
 package com.shrek.pokemon.ui
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -12,14 +13,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.asFlow
 import coil.compose.rememberImagePainter
 import com.shrek.pokemon.MainViewModel
 import com.shrek.pokemon.R
 import com.shrek.pokemon.network.api.ApiResult
 import com.shrek.pokemonlibrary.network.data.models.Pokemon
 import com.shrek.pokemonlibrary.network.data.models.PokemonApiResult
+import kotlinx.coroutines.flow.debounce
 
-val DELAY_SEARCH_IN_MILLIS = 300L
+const val DELAY_SEARCH_IN_MILLIS = 300L
+const val MIN_CHARS_FOR_SEARCH = 1
 
 @Composable
 fun MainScreen(
@@ -29,18 +33,16 @@ fun MainScreen(
     val scope = rememberCoroutineScope() // Use to make API call during retry.
     val pokemonSearchResult by mainViewModel.searchResult.observeAsState()
 
-    // FIXME - Add debounce/throttle in search
-//    val searchText by mainViewModel.enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS)
-//        .collectAsState(response.result?.contents?.text ?: "")
+    val searchText by mainViewModel.enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS)
+        .collectAsState(pokemonSearchResult?.result?.name ?: "")
 
-    val searchText by mainViewModel.enteredSearchText.observeAsState()
-
-    if(!searchText.isNullOrBlank())
-        LaunchedEffect(key1 = "searchText") { // TODO remove quotes around searchText here
+    if(!searchText.isNullOrBlank() && searchText.length > MIN_CHARS_FOR_SEARCH)
+        LaunchedEffect(key1 = searchText) {
             mainViewModel.searchPokemon(searchText = searchText!!)
         }
 
     Content(
+        searchText = searchText,
         response = pokemonSearchResult,
         onSearch = {
             mainViewModel.enteredSearchText.value = it
@@ -49,7 +51,7 @@ fun MainScreen(
 }
 
 @Composable
-fun Content(response: PokemonApiResult?, onSearch: (String) -> Unit) {
+fun Content(searchText: String?, response: PokemonApiResult?, onSearch: (String) -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -70,7 +72,7 @@ fun Content(response: PokemonApiResult?, onSearch: (String) -> Unit) {
             Spacer(modifier = Modifier.size(16.dp))
 
             // Text input field
-            var enteredText by rememberSaveable { mutableStateOf(response?.result?.name ?: "") }
+            var enteredText by rememberSaveable { mutableStateOf("") }
             var errorText by rememberSaveable { mutableStateOf("") }
             TextField(
                 modifier = Modifier
@@ -99,18 +101,27 @@ fun Content(response: PokemonApiResult?, onSearch: (String) -> Unit) {
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            // FIXME - Progress state doesn't show when search text gets updated.
+            // FIXME - some intermeditate states show somehow, RCA and fix that.
             // Search Result Section
             when {
-                response == null -> Unit // TODO think and handle this; probably as error 
-                response.isInProgress() -> CircularProgressIndicator(
-                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                    color = MaterialTheme.colors.primary
-                )
-                response.isSuccess() && response.result != null -> ResultSection(response.result)
+                response == null || searchText.isNullOrBlank() -> Unit // TODO think and handle this; probably as error
+                response.isInProgress() || enteredText != searchText -> {
+                    Log.d("PokemonLogs", "CircularProgressIndicator: searchText = $searchText, enteredText = $enteredText")
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+                        color = MaterialTheme.colors.primary
+                    )
+                }
+                response.isSuccess() && response.result != null -> ResultSection(response.result!!)
                 response.isError() -> {
-                    if(response.error?.httpFailureCode == 404) NoResultsText() // Result not found
-                    else ShowRetryScreen(message = response.error?.errorMessage) // Retryable error
+                    if(response.error?.httpFailureCode == 404) {
+                        Log.d("PokemonLogs", "NoResultsText: searchText = $searchText, enteredText = $enteredText")
+                        NoResultsText(searchText = searchText)
+                    } // Result not found
+                    else {
+                        Log.d("PokemonLogs", "ShowRetryScreen: searchText = $searchText, enteredText = $enteredText")
+                        ShowRetryScreen(message = response.error?.errorMessage)
+                    } // Retryable error
                 }
             }
         }
@@ -118,27 +129,23 @@ fun Content(response: PokemonApiResult?, onSearch: (String) -> Unit) {
 }
 
 @Composable
-fun ResultSection(response: Pokemon?) {
+fun ResultSection(response: Pokemon) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        if(response == null) {
-            NoResultsText(response?.name)
-        } else {
-            Image(
-                painter = rememberImagePainter(data = response.imgUrl),
-                contentDescription = stringResource(R.string.content_description_pokemon_image),
-                modifier = Modifier.wrapContentSize(),
-            )
+        Image(
+            painter = rememberImagePainter(data = response.imgUrl),
+            contentDescription = stringResource(R.string.content_description_pokemon_image),
+            modifier = Modifier.wrapContentSize(),
+        )
 
-            Spacer(modifier = Modifier.size(16.dp))
+        Spacer(modifier = Modifier.size(16.dp))
 
-            // Search result
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = response.description,
-                color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-                style = MaterialTheme.typography.subtitle1,
-            )
-        }
+        // Search result
+        Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = response.description,
+            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+            style = MaterialTheme.typography.subtitle1,
+        )
     }
 }
 
