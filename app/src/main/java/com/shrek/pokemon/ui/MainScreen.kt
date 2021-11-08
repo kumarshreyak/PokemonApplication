@@ -27,7 +27,7 @@ fun MainScreen(
     lifecycleOwner: LifecycleOwner,
 ) {
     val scope = rememberCoroutineScope() // Use to make API call during retry.
-    val pokemonSearchResult by mainViewModel.searchResult.observeAsState()
+    val pokemonSearchResult by mainViewModel.searchResult
 
     // FIXME - Add debounce/throttle in search
 //    val searchText by mainViewModel.enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS)
