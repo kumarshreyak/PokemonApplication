@@ -12,7 +12,6 @@ import com.shrek.pokemonlibrary.network.repository.MainRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 class PokemonClient internal constructor(
     private val sdkKey: String,
@@ -20,33 +19,36 @@ class PokemonClient internal constructor(
     private var logLevel: PokemonClientLogLevel
 ) {
 
-    private val _searchResult = MutableLiveData(PokemonApiResult())
-    val pokemonSearchResult: LiveData<PokemonApiResult> = _searchResult
+    private val _searchResult = MutableLiveData(PokemonApiResult<Pokemon>())
+    val pokemonSearchResult: LiveData<PokemonApiResult<Pokemon>> = _searchResult
 
-    fun searchPokemon(text: String) : LiveData<PokemonApiResult> {
-        _searchResult.value = PokemonApiResult()
+    fun searchPokemon(pokemonName: String) : PokemonApiResult<Pokemon> {
+        val apiResult = PokemonApiResult<Pokemon>()
+        _searchResult.value = apiResult
         CoroutineScope(Dispatchers.IO).launch {
             fetchPokemon(
-                searchText = text,
+                searchText = pokemonName,
                 onError = { apiError ->
                     this.launch(context = Dispatchers.Main) {
-                        _searchResult.value = PokemonApiResult().apply {
+                        apiResult.apply {
                             resultState = ResultState.ERROR
                             error = apiError?.toPokemonError()
                         }
+                        _searchResult.value = apiResult
                     }
                 },
                 onSuccess = { pokemon ->
                     this.launch(context = Dispatchers.Main) {
-                        _searchResult.value = PokemonApiResult().apply {
+                        apiResult.apply {
                             resultState = ResultState.SUCCESS
                             result = pokemon
                         }
+                        _searchResult.value = apiResult
                     }
                 },
             )
         }
-        return _searchResult
+        return apiResult
     }
 
 
