@@ -22,7 +22,7 @@ class PokemonClient internal constructor(
     private val _searchResult = MutableLiveData(PokemonApiResult<PokemonShakespeareDescription>())
     val pokemonShakespeareDescriptionSearchResult: LiveData<PokemonApiResult<PokemonShakespeareDescription>> = _searchResult
 
-    fun searchPokemon(pokemonName: String) : PokemonApiResult<PokemonShakespeareDescription> {
+    fun searchPokemonShakespeareDescription(pokemonName: String) : PokemonApiResult<PokemonShakespeareDescription> {
         val apiResult = PokemonApiResult<PokemonShakespeareDescription>()
         _searchResult.value = apiResult
         CoroutineScope(Dispatchers.IO).launch {

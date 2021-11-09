@@ -13,7 +13,7 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
     val searchResult = PokemonClient.instance().pokemonShakespeareDescriptionSearchResult
     fun searchPokemon(searchText: String) {
-        PokemonClient.instance().searchPokemon(pokemonName = searchText)
+        PokemonClient.instance().searchPokemonShakespeareDescription(pokemonName = searchText)
     }
 
     class Factory(private val mainRepository: MainRepository) : ViewModelProvider.NewInstanceFactory() {
