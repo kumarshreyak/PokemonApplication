@@ -17,8 +17,6 @@ import androidx.lifecycle.asFlow
 import coil.compose.rememberImagePainter
 import com.shrek.pokemon.MainViewModel
 import com.shrek.pokemon.R
-import com.shrek.pokemonlibrary.network.data.models.PokemonShakespeareDescription
-import com.shrek.pokemonlibrary.network.data.models.PokemonApiResult
 import kotlinx.coroutines.flow.debounce
 
 const val DELAY_SEARCH_IN_MILLIS = 300L
@@ -104,31 +102,34 @@ fun Content(
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            val image by mainViewModel.description.observeAsState()
-            val description by mainViewModel.sprite.observeAsState()
+            val description by mainViewModel.description.observeAsState()
+            val image by mainViewModel.sprite.observeAsState()
             // FIXME - some intermeditate states show somehow, RCA and fix that.
             // Search Result Section
             when {
-                image == null || description == null || searchText.isNullOrBlank() -> Unit
-                (image!!.isInProgress() || description!!.isInProgress()) || enteredText != searchText -> {
+                description == null || image == null || searchText.isNullOrBlank() -> Unit
+                (description!!.isInProgress() || image!!.isInProgress()) || enteredText != searchText -> {
                     Log.d("PokemonLogs", "CircularProgressIndicator: searchText = $searchText, enteredText = $enteredText")
                     CircularProgressIndicator(
                         modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
                         color = MaterialTheme.colors.primary
                     )
                 }
-                (image!!.isSuccess() || description!!.isSuccess()) -> ResultSection(
-                        imageUrl = image!!.result!!,
-                        description = description!!.result!!.imgUrl
+                (description!!.isSuccess() || image!!.isSuccess()) -> {
+                    Log.d("PokemonLogs", "ResultSection: searchText = $searchText, enteredText = $enteredText")
+                    ResultSection(
+                        imageUrl = image!!.result!!.imgUrl,
+                        description = description!!.result!!
                     )
-                (image!!.isError() || description!!.isError()) -> {
-                    if(image?.error?.httpFailureCode == 404 ||
-                        description?.error?.httpFailureCode == 404) {
+                }
+                (description!!.isError() || image!!.isError()) -> {
+                    if(description?.error?.httpFailureCode == 404 ||
+                        image?.error?.httpFailureCode == 404) {
                         Log.d("PokemonLogs", "NoResultsText: searchText = $searchText, enteredText = $enteredText")
                         NoResultsText(searchText = searchText)
                     } else {
                         Log.d("PokemonLogs", "ShowRetryScreen: searchText = $searchText, enteredText = $enteredText")
-                        ShowRetryScreen(message = image?.error?.errorMessage)
+                        ShowRetryScreen(message = description?.error?.errorMessage)
                     }
                 }
             }

@@ -8,6 +8,7 @@ import com.shrek.pokemonlibrary.network.data.models.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PokemonClient internal constructor(
     private val sdkKey: String,
@@ -47,17 +48,17 @@ class PokemonClient internal constructor(
 //        return apiResult
 //    }
 
-    fun searchPokemonShakespeareDescription(pokemonName: String) : PokemonApiResult<String>  {
-        var response = PokemonApiResult<String>()
-        CoroutineScope(Dispatchers.IO).launch {
+    suspend fun searchPokemonShakespeareDescription(pokemonName: String) : PokemonApiResult<String>  {
+        var response: PokemonApiResult<String>
+        withContext(Dispatchers.IO) {
             response = fetchPokemonShakespeareDescription(species = pokemonName).toPokemonApiResult()
         }
         return response
     }
 
-    fun searchPokemonSprite(pokemonName: String) : PokemonApiResult<PokemonSprite>  {
+    suspend fun searchPokemonSprite(pokemonName: String) : PokemonApiResult<PokemonSprite>  {
         var response = PokemonApiResult<PokemonSprite>()
-        CoroutineScope(Dispatchers.IO).launch {
+        withContext(Dispatchers.IO) {
             response = fetchPokemonSprite(pokemonName = pokemonName).toPokemonApiResult()
         }
         return response

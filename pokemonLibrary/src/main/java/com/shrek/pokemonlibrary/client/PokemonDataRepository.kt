@@ -4,7 +4,7 @@ import com.shrek.pokemonlibrary.network.api.ApiResult
 import com.shrek.pokemonlibrary.network.data.models.*
 import com.shrek.pokemonlibrary.network.repository.MainRepository
 
-suspend fun fetchPokemonSprite(pokemonName: String) : ApiResult<PokemonSprite> {
+internal suspend fun fetchPokemonSprite(pokemonName: String) : ApiResult<PokemonSprite> {
     val response = ApiResult<PokemonSprite>()
     val pokemonResponse = MainRepository.getPokemon(pokemonName)
     when {
@@ -28,7 +28,7 @@ suspend fun fetchPokemonSprite(pokemonName: String) : ApiResult<PokemonSprite> {
     return response
 }
 
-suspend fun fetchPokemonShakespeareDescription(species: String) : ApiResult<String> {
+internal suspend fun fetchPokemonShakespeareDescription(species: String) : ApiResult<String> {
     val response = ApiResult<String>()
     val pokemonSpeciesResponse = MainRepository.getPokemonSpecies(species)
     when {
@@ -52,7 +52,7 @@ suspend fun fetchPokemonShakespeareDescription(species: String) : ApiResult<Stri
     return response
 }
 
-suspend fun fetchShakespeareDescription(text: String) : ApiResult<String> {
+internal suspend fun fetchShakespeareDescription(text: String) : ApiResult<String> {
     val finalResponse = ApiResult<String>()
     val response = MainRepository.getShakespeareText(GetShakespeareTextRequest(text = text))
     when {
