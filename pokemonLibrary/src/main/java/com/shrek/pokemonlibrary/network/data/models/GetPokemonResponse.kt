@@ -5,7 +5,9 @@ data class GetPokemonResponse (
     var name : String,
     var species : Species?,
     var sprites: Sprites?,
-)
+) {
+    fun hasSprite() = !sprites?.frontDefault.isNullOrBlank()
+}
 
 fun GetPokemonResponse.isValid() : Boolean {
     return !species?.name.isNullOrBlank() && !sprites?.frontDefault.isNullOrBlank()
@@ -26,12 +28,12 @@ data class Species (
 )
 
 data class Sprites (
-    var backDefault : String,
-    var backFemale : String,
-    var backShiny : String,
-    var backShinyFemale : String,
+    var backDefault : String?,
+    var backFemale : String?,
+    var backShiny : String?,
+    var backShinyFemale : String?,
     var frontDefault : String?,
-    var frontFemale : String,
-    var frontShiny : String,
-    var frontShinyFemale : String,
+    var frontFemale : String?,
+    var frontShiny : String?,
+    var frontShinyFemale : String?,
 )

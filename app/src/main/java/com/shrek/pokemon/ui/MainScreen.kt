@@ -30,10 +30,10 @@ fun MainScreen(
     lifecycleOwner: LifecycleOwner,
 ) {
     val scope = rememberCoroutineScope() // Use to make API call during retry.
-    val pokemonSearchResult by mainViewModel.searchResult.observeAsState()
+//    val pokemonSearchResult by mainViewModel.searchResult.observeAsState()
 
     val searchText by mainViewModel.enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS)
-        .collectAsState(pokemonSearchResult?.result?.name ?: "")
+        .collectAsState("")
 
     if(!searchText.isNullOrBlank() && searchText.length > MIN_CHARS_FOR_SEARCH)
         LaunchedEffect(key1 = searchText) {
@@ -41,8 +41,8 @@ fun MainScreen(
         }
 
     Content(
+        mainViewModel = mainViewModel,
         searchText = searchText,
-        response = pokemonSearchResult,
         onSearch = {
             mainViewModel.enteredSearchText.value = it
         }
@@ -50,7 +50,11 @@ fun MainScreen(
 }
 
 @Composable
-fun Content(searchText: String?, response: PokemonApiResult<PokemonShakespeareDescription>?, onSearch: (String) -> Unit) {
+fun Content(
+    mainViewModel: MainViewModel,
+    searchText: String?,
+    onSearch: (String) -> Unit
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -100,27 +104,32 @@ fun Content(searchText: String?, response: PokemonApiResult<PokemonShakespeareDe
 
             Spacer(modifier = Modifier.size(16.dp))
 
+            val image by mainViewModel.description.observeAsState()
+            val description by mainViewModel.sprite.observeAsState()
             // FIXME - some intermeditate states show somehow, RCA and fix that.
             // Search Result Section
             when {
-                response == null || searchText.isNullOrBlank() -> Unit // TODO think and handle this; probably as error
-                response.isInProgress() || enteredText != searchText -> {
+                image == null || description == null || searchText.isNullOrBlank() -> Unit
+                (image!!.isInProgress() || description!!.isInProgress()) || enteredText != searchText -> {
                     Log.d("PokemonLogs", "CircularProgressIndicator: searchText = $searchText, enteredText = $enteredText")
                     CircularProgressIndicator(
                         modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
                         color = MaterialTheme.colors.primary
                     )
                 }
-                response.isSuccess() && response.result != null -> ResultSection(response.result!!)
-                response.isError() -> {
-                    if(response.error?.httpFailureCode == 404) {
+                (image!!.isSuccess() || description!!.isSuccess()) -> ResultSection(
+                        imageUrl = image!!.result!!,
+                        description = description!!.result!!.imgUrl
+                    )
+                (image!!.isError() || description!!.isError()) -> {
+                    if(image?.error?.httpFailureCode == 404 ||
+                        description?.error?.httpFailureCode == 404) {
                         Log.d("PokemonLogs", "NoResultsText: searchText = $searchText, enteredText = $enteredText")
                         NoResultsText(searchText = searchText)
-                    } // Result not found
-                    else {
+                    } else {
                         Log.d("PokemonLogs", "ShowRetryScreen: searchText = $searchText, enteredText = $enteredText")
-                        ShowRetryScreen(message = response.error?.errorMessage)
-                    } // Retryable error
+                        ShowRetryScreen(message = image?.error?.errorMessage)
+                    }
                 }
             }
         }
@@ -128,20 +137,20 @@ fun Content(searchText: String?, response: PokemonApiResult<PokemonShakespeareDe
 }
 
 @Composable
-fun ResultSection(pokemonShakespeareDescription: PokemonShakespeareDescription) {
+fun ResultSection(imageUrl: String, description: String) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Image(
-            painter = rememberImagePainter(data = pokemonShakespeareDescription.imgUrl),
+            painter = rememberImagePainter(data = imageUrl),
             contentDescription = stringResource(R.string.content_description_pokemon_image),
-            modifier = Modifier.wrapContentSize(),
+            modifier = Modifier.wrapContentSize()
+                .align(alignment = Alignment.CenterHorizontally),
         )
 
         Spacer(modifier = Modifier.size(16.dp))
 
-        // Search result
         Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = pokemonShakespeareDescription.description,
+            modifier = Modifier.fillMaxWidth().align(alignment = Alignment.CenterHorizontally),
+            text = description,
             color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
             style = MaterialTheme.typography.subtitle1,
         )

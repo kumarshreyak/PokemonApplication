@@ -5,4 +5,3 @@ data class PokemonShakespeareDescription(
     val description: String,
     val imgUrl: String,
 )
-

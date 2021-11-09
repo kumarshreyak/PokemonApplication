@@ -5,10 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.shrek.pokemonlibrary.network.api.ResultState
 import com.shrek.pokemonlibrary.network.data.models.*
-import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextRequest
-import com.shrek.pokemonlibrary.network.data.models.getEnglishDescription
-import com.shrek.pokemonlibrary.network.data.models.isValid
-import com.shrek.pokemonlibrary.network.repository.MainRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -19,132 +15,113 @@ class PokemonClient internal constructor(
     private var logLevel: PokemonClientLogLevel
 ) {
 
-    private val _searchResult = MutableLiveData(PokemonApiResult<PokemonShakespeareDescription>())
-    val pokemonShakespeareDescriptionSearchResult: LiveData<PokemonApiResult<PokemonShakespeareDescription>> = _searchResult
+//    private val _pokemonShakespeareDescriptionSearchResult = MutableLiveData(PokemonApiResult<PokemonShakespeareDescription>())
+//    val pokemonShakespeareDescriptionSearchResult: LiveData<PokemonApiResult<PokemonShakespeareDescription>> = _pokemonShakespeareDescriptionSearchResult
 
-    fun searchPokemonShakespeareDescription(pokemonName: String) : PokemonApiResult<PokemonShakespeareDescription> {
-        val apiResult = PokemonApiResult<PokemonShakespeareDescription>()
-        _searchResult.value = apiResult
+//    fun searchPokeShakespeareDescription(pokemonName: String) : PokemonApiResult<PokemonShakespeareDescription> {
+//        val apiResult = PokemonApiResult<PokemonShakespeareDescription>()
+//        _pokemonShakespeareDescriptionSearchResult.value = apiResult
+//        CoroutineScope(Dispatchers.IO).launch {
+//            fetchPokemonDescription(
+//                searchText = pokemonName,
+//                onError = { apiError ->
+//                    this.launch(context = Dispatchers.Main) {
+//                        apiResult.apply {
+//                            resultState = ResultState.ERROR
+//                            error = apiError?.toPokemonError()
+//                        }
+//                        _pokemonShakespeareDescriptionSearchResult.value = apiResult
+//                    }
+//                },
+//                onSuccess = { pokemon ->
+//                    this.launch(context = Dispatchers.Main) {
+//                        apiResult.apply {
+//                            resultState = ResultState.SUCCESS
+//                            result = pokemon
+//                        }
+//                        _pokemonShakespeareDescriptionSearchResult.value = apiResult
+//                    }
+//                },
+//            )
+//        }
+//        return apiResult
+//    }
+
+    fun searchPokemonShakespeareDescription(pokemonName: String) : PokemonApiResult<String>  {
+        var response = PokemonApiResult<String>()
         CoroutineScope(Dispatchers.IO).launch {
-            fetchPokemon(
-                searchText = pokemonName,
-                onError = { apiError ->
-                    this.launch(context = Dispatchers.Main) {
-                        apiResult.apply {
-                            resultState = ResultState.ERROR
-                            error = apiError?.toPokemonError()
-                        }
-                        _searchResult.value = apiResult
-                    }
-                },
-                onSuccess = { pokemon ->
-                    this.launch(context = Dispatchers.Main) {
-                        apiResult.apply {
-                            resultState = ResultState.SUCCESS
-                            result = pokemon
-                        }
-                        _searchResult.value = apiResult
-                    }
-                },
-            )
+            response = fetchPokemonShakespeareDescription(species = pokemonName).toPokemonApiResult()
         }
-        return apiResult
+        return response
     }
 
+    fun searchPokemonSprite(pokemonName: String) : PokemonApiResult<PokemonSprite>  {
+        var response = PokemonApiResult<PokemonSprite>()
+        CoroutineScope(Dispatchers.IO).launch {
+            response = fetchPokemonSprite(pokemonName = pokemonName).toPokemonApiResult()
+        }
+        return response
+    }
 
-    private suspend fun fetchPokemon(
-        searchText: String,
-        onError: ((pokemonError: Throwable?) -> Unit)? = null,
-        onSuccess: (pokemonShakespeareDescription: PokemonShakespeareDescription) -> Unit
-    ) {
-        val pokemonResponse = MainRepository.getPokemon(searchText)
-        when {
-            pokemonResponse.isSuccess() -> {
-                if(pokemonResponse.result?.isValid() == true) {
-                    val species = pokemonResponse.result.species?.name!!
-                    val imgUrl = pokemonResponse.result.sprites?.frontDefault!!
-                    fetchPokemonSpecies(species = species, onError = onError) {
-                        onSuccess(
-                                PokemonShakespeareDescription(
-                                name = pokemonResponse.result.name,
-                                description = it,
-                                imgUrl = imgUrl
-                            )
-                        )
-                    }
-                } else {
-                    onError?.invoke(Throwable("Species/Image of pokemon not found"))
+//        private val _pokemonSpriteSearchResult = MutableLiveData(PokemonApiResult<PokemonSprite>())
+//        val pokemonSpriteSearchResult: LiveData<PokemonApiResult<PokemonSprite>> = _pokemonSpriteSearchResult
+//
+//        fun searchPokemonSprite(pokemonName: String) : PokemonApiResult<PokemonSprite> {
+//            val apiResult = PokemonApiResult<PokemonSprite>()
+//            _pokemonSpriteSearchResult.value = apiResult
+//            CoroutineScope(Dispatchers.IO).launch {
+//                fetchPokemonDescription(
+//                    searchText = pokemonName,
+//                    onError = { apiError ->
+//                        this.launch(context = Dispatchers.Main) {
+//                            apiResult.apply {
+//                                resultState = ResultState.ERROR
+//                                error = apiError?.toPokemonError()
+//                            }
+//                            _pokemonSpriteSearchResult.value = apiResult
+//                        }
+//                    },
+//                    onSuccess = { pokemon ->
+//                        this.launch(context = Dispatchers.Main) {
+//                            apiResult.apply {
+//                                resultState = ResultState.SUCCESS
+//                                result = pokemon
+//                            }
+//                            _pokemonSpriteSearchResult.value = apiResult
+//                        }
+//                    },
+//                )
+//            }
+//            return apiResult
+//        }
+
+
+
+
+
+        /**
+         * @param sdkKey Unique identifier for anyone using this SDK. Just a placeholder for now.
+         * @param appContext Application Context of app using this sdk
+         */
+        class Builder(private val sdkKey: String = "SDK_KEY", private val appContext: Context) {
+            // Configurable options here
+            private var logLevel: PokemonClientLogLevel = PokemonClientLogLevel.DEBUG
+
+            fun logLevel(level: PokemonClientLogLevel) : Builder {
+                logLevel = level
+                return this
+            }
+
+            fun build() : PokemonClient {
+                return buildPokemonClient().also {
+                    instance = it
                 }
             }
-            pokemonResponse.isError() -> onError?.invoke(pokemonResponse.error)
-            else -> Unit
-        }
-    }
 
-    private suspend fun fetchPokemonSpecies(
-        species: String,
-        onError: ((error: Throwable?) -> Unit)? = null,
-        onSuccess: (translatedDescription: String) -> Unit,
-    ) {
-        val pokemonSpeciesResponse = MainRepository.getPokemonSpecies(species)
-        when {
-            pokemonSpeciesResponse.isSuccess() -> {
-                if(!pokemonSpeciesResponse.result?.getEnglishDescription().isNullOrBlank()) {
-                    val englishDescription = pokemonSpeciesResponse.result?.getEnglishDescription()!!
-                     fetchShakespeareDescription(text = englishDescription, onSuccess = onSuccess, onError = onError)
-                } else {
-                    onError?.invoke(Throwable("No description found for PokemonShakespeareDescription"))
-                }
-            }
-            pokemonSpeciesResponse.isError() -> onError?.invoke(pokemonSpeciesResponse.error)
-            else -> Unit
-        }
-    }
-
-    private suspend fun fetchShakespeareDescription(
-        text: String,
-        onSuccess: (description: String) -> Unit,
-        onError: ((error: Throwable?) -> Unit)? = null,
-    ) {
-        val response = MainRepository.getShakespeareText(GetShakespeareTextRequest(text = text))
-        when {
-            response.isSuccess() -> {
-                val translatedText = response.result?.contents?.translated
-                if(translatedText.isNullOrBlank()) {
-                    onError?.invoke(Throwable("No translation found for description of PokemonShakespeareDescription"))
-                } else {
-                    onSuccess(translatedText)
-                }
-            }
-            response.isError() -> onError?.invoke(Throwable(response.error))
-            else -> Unit
-        }
-    }
-
-
-    /**
-     * @param sdkKey Unique identifier for anyone using this SDK. Just a placeholder for now.
-     * @param appContext Application Context of app using this sdk
-     */
-    class Builder(private val sdkKey: String = "SDK_KEY", private val appContext: Context) {
-        // Configurable options here
-        private var logLevel: PokemonClientLogLevel = PokemonClientLogLevel.DEBUG
-
-        fun logLevel(level: PokemonClientLogLevel) : Builder {
-            logLevel = level
-            return this
-        }
-
-        fun build() : PokemonClient {
-            return buildPokemonClient().also {
-                instance = it
+            private fun buildPokemonClient() : PokemonClient {
+                return PokemonClient(sdkKey, appContext, logLevel)
             }
         }
-
-        private fun buildPokemonClient() : PokemonClient {
-            return PokemonClient(sdkKey, appContext, logLevel)
-        }
-    }
 
     companion object {
         private var instance: PokemonClient? = null
