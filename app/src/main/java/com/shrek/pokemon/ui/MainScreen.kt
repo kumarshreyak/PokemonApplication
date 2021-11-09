@@ -18,6 +18,7 @@ import coil.compose.rememberImagePainter
 import com.shrek.pokemon.MainViewModel
 import com.shrek.pokemon.R
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 
 const val DELAY_SEARCH_IN_MILLIS = 300L
 const val MIN_CHARS_FOR_SEARCH = 1
@@ -35,7 +36,9 @@ fun MainScreen(
 
     if(!searchText.isNullOrBlank() && searchText.length > MIN_CHARS_FOR_SEARCH)
         LaunchedEffect(key1 = searchText) {
-            mainViewModel.searchPokemon(searchText = searchText!!)
+            scope.launch {
+                mainViewModel.searchPokemon(searchText = searchText!!)
+            }
         }
 
     Content(
@@ -115,7 +118,7 @@ fun Content(
                         color = MaterialTheme.colors.primary
                     )
                 }
-                (description!!.isSuccess() || image!!.isSuccess()) -> {
+                (description!!.isSuccess() && image!!.isSuccess()) -> {
                     Log.d("PokemonLogs", "ResultSection: searchText = $searchText, enteredText = $enteredText")
                     ResultSection(
                         imageUrl = image!!.result!!.imgUrl,
