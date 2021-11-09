@@ -11,7 +11,7 @@ class MainViewModel(private val mainRepository: MainRepository) : ViewModel() {
 
     val enteredSearchText = MutableLiveData("")
 
-    val searchResult = PokemonClient.instance().pokemonSearchResult
+    val searchResult = PokemonClient.instance().pokemonShakespeareDescriptionSearchResult
     fun searchPokemon(searchText: String) {
         PokemonClient.instance().searchPokemon(pokemonName = searchText)
     }

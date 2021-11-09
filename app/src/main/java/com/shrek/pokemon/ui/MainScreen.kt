@@ -17,7 +17,7 @@ import androidx.lifecycle.asFlow
 import coil.compose.rememberImagePainter
 import com.shrek.pokemon.MainViewModel
 import com.shrek.pokemon.R
-import com.shrek.pokemonlibrary.network.data.models.Pokemon
+import com.shrek.pokemonlibrary.network.data.models.PokemonShakespeareDescription
 import com.shrek.pokemonlibrary.network.data.models.PokemonApiResult
 import kotlinx.coroutines.flow.debounce
 
@@ -50,7 +50,7 @@ fun MainScreen(
 }
 
 @Composable
-fun Content(searchText: String?, response: PokemonApiResult<Pokemon>?, onSearch: (String) -> Unit) {
+fun Content(searchText: String?, response: PokemonApiResult<PokemonShakespeareDescription>?, onSearch: (String) -> Unit) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -128,10 +128,10 @@ fun Content(searchText: String?, response: PokemonApiResult<Pokemon>?, onSearch:
 }
 
 @Composable
-fun ResultSection(pokemon: Pokemon) {
+fun ResultSection(pokemonShakespeareDescription: PokemonShakespeareDescription) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Image(
-            painter = rememberImagePainter(data = pokemon.imgUrl),
+            painter = rememberImagePainter(data = pokemonShakespeareDescription.imgUrl),
             contentDescription = stringResource(R.string.content_description_pokemon_image),
             modifier = Modifier.wrapContentSize(),
         )
@@ -141,7 +141,7 @@ fun ResultSection(pokemon: Pokemon) {
         // Search result
         Text(
             modifier = Modifier.fillMaxWidth(),
-            text = pokemon.description,
+            text = pokemonShakespeareDescription.description,
             color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
             style = MaterialTheme.typography.subtitle1,
         )

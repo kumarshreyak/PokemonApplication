@@ -19,11 +19,11 @@ class PokemonClient internal constructor(
     private var logLevel: PokemonClientLogLevel
 ) {
 
-    private val _searchResult = MutableLiveData(PokemonApiResult<Pokemon>())
-    val pokemonSearchResult: LiveData<PokemonApiResult<Pokemon>> = _searchResult
+    private val _searchResult = MutableLiveData(PokemonApiResult<PokemonShakespeareDescription>())
+    val pokemonShakespeareDescriptionSearchResult: LiveData<PokemonApiResult<PokemonShakespeareDescription>> = _searchResult
 
-    fun searchPokemon(pokemonName: String) : PokemonApiResult<Pokemon> {
-        val apiResult = PokemonApiResult<Pokemon>()
+    fun searchPokemon(pokemonName: String) : PokemonApiResult<PokemonShakespeareDescription> {
+        val apiResult = PokemonApiResult<PokemonShakespeareDescription>()
         _searchResult.value = apiResult
         CoroutineScope(Dispatchers.IO).launch {
             fetchPokemon(
@@ -55,7 +55,7 @@ class PokemonClient internal constructor(
     private suspend fun fetchPokemon(
         searchText: String,
         onError: ((pokemonError: Throwable?) -> Unit)? = null,
-        onSuccess: (pokemon: Pokemon) -> Unit
+        onSuccess: (pokemonShakespeareDescription: PokemonShakespeareDescription) -> Unit
     ) {
         val pokemonResponse = MainRepository.getPokemon(searchText)
         when {
@@ -65,7 +65,7 @@ class PokemonClient internal constructor(
                     val imgUrl = pokemonResponse.result.sprites?.frontDefault!!
                     fetchPokemonSpecies(species = species, onError = onError) {
                         onSuccess(
-                                Pokemon(
+                                PokemonShakespeareDescription(
                                 name = pokemonResponse.result.name,
                                 description = it,
                                 imgUrl = imgUrl
@@ -93,7 +93,7 @@ class PokemonClient internal constructor(
                     val englishDescription = pokemonSpeciesResponse.result?.getEnglishDescription()!!
                      fetchShakespeareDescription(text = englishDescription, onSuccess = onSuccess, onError = onError)
                 } else {
-                    onError?.invoke(Throwable("No description found for Pokemon"))
+                    onError?.invoke(Throwable("No description found for PokemonShakespeareDescription"))
                 }
             }
             pokemonSpeciesResponse.isError() -> onError?.invoke(pokemonSpeciesResponse.error)
@@ -111,7 +111,7 @@ class PokemonClient internal constructor(
             response.isSuccess() -> {
                 val translatedText = response.result?.contents?.translated
                 if(translatedText.isNullOrBlank()) {
-                    onError?.invoke(Throwable("No translation found for description of Pokemon"))
+                    onError?.invoke(Throwable("No translation found for description of PokemonShakespeareDescription"))
                 } else {
                     onSuccess(translatedText)
                 }

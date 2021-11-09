@@ -2,12 +2,6 @@ package com.shrek.pokemonlibrary.network.data.models
 
 import com.shrek.pokemonlibrary.network.api.ResultState
 
-data class Pokemon(
-    val name: String,
-    val description: String,
-    val imgUrl: String,
-)
-
 data class PokemonApiResult<T>(
     var resultState: ResultState = ResultState.IN_PROGRESS,
     var error: PokemonError? = null,
