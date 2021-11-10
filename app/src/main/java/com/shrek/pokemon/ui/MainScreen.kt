@@ -17,6 +17,7 @@ import androidx.lifecycle.asFlow
 import coil.compose.rememberImagePainter
 import com.shrek.pokemon.MainViewModel
 import com.shrek.pokemon.R
+import com.shrek.pokemonlibrary.client.ui.PokemonShakespeareDescriptionUI
 import com.shrek.pokemonlibrary.client.ui.PokemonSpriteUI
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
@@ -29,19 +30,9 @@ fun MainScreen(
     mainViewModel: MainViewModel,
     lifecycleOwner: LifecycleOwner,
 ) {
-    val scope = rememberCoroutineScope() // Use to make API call during retry.
-//    val pokemonSearchResult by mainViewModel.searchResult.observeAsState()
-
     val searchText by mainViewModel.enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS)
         .collectAsState("")
 
-//    if(!searchText.isNullOrBlank() && searchText.length > MIN_CHARS_FOR_SEARCH)
-//        LaunchedEffect(key1 = searchText) {
-//            scope.launch {
-//                mainViewModel.searchPokemon(searchText = searchText!!)
-//            }
-//        }
-//
     Content(
         mainViewModel = mainViewModel,
         searchText = searchText,
@@ -76,111 +67,51 @@ fun Content(
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            // Text input field
-            var enteredText by rememberSaveable { mutableStateOf("") }
-            var errorText by rememberSaveable { mutableStateOf("") }
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(alignment = Alignment.CenterHorizontally),
-                value = enteredText,
-                onValueChange = {
-                    enteredText = it
-                    errorText = ""
-                    onSearch(it)
-                },
-                keyboardActions = KeyboardActions { errorText = validate(enteredText) },
-                isError = errorText.isNotBlank(),
-                placeholder = { Text(stringResource(R.string.search_pokemon)) },
-                singleLine = true,
-            )
-
-            // Helper text if error exists
-            if(errorText.isNotBlank())
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = errorText,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-                    style = MaterialTheme.typography.caption,
-                )
+            TextFieldSection(columnScope = this, onSearch = onSearch)
 
             Spacer(modifier = Modifier.size(16.dp))
 
             PokemonSpriteUI(searchText = searchText)
-//            val description by mainViewModel.description.observeAsState()
-//            val image by mainViewModel.sprite.observeAsState()
-//            // FIXME - some intermeditate states show somehow, RCA and fix that.
-//            // Search Result Section
-//            when {
-//                description == null || image == null || searchText.isNullOrBlank() -> Unit
-//                (description!!.isInProgress() || image!!.isInProgress()) || enteredText != searchText -> {
-//                    Log.d("PokemonLogs", "CircularProgressIndicator: searchText = $searchText, enteredText = $enteredText")
-//                    CircularProgressIndicator(
-//                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-//                        color = MaterialTheme.colors.primary
-//                    )
-//                }
-//                (description!!.isSuccess() && image!!.isSuccess()) -> {
-//                    Log.d("PokemonLogs", "ResultSection: searchText = $searchText, enteredText = $enteredText")
-//                    ResultSection(
-//                        imageUrl = image!!.result!!.imgUrl,
-//                        description = description!!.result!!
-//                    )
-//                }
-//                (description!!.isError() || image!!.isError()) -> {
-//                    if(description?.error?.httpFailureCode == 404 ||
-//                        image?.error?.httpFailureCode == 404) {
-//                        Log.d("PokemonLogs", "NoResultsText: searchText = $searchText, enteredText = $enteredText")
-//                        NoResultsText(searchText = searchText)
-//                    } else {
-//                        Log.d("PokemonLogs", "ShowRetryScreen: searchText = $searchText, enteredText = $enteredText")
-//                        ShowRetryScreen(message = description?.error?.errorMessage)
-//                    }
-//                }
-//            }
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            PokemonShakespeareDescriptionUI(searchText = searchText)
         }
     }
 }
 
 @Composable
-fun ResultSection(imageUrl: String, description: String) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        Image(
-            painter = rememberImagePainter(data = imageUrl),
-            contentDescription = stringResource(R.string.content_description_pokemon_image),
-            modifier = Modifier.wrapContentSize()
+fun TextFieldSection(
+    columnScope: ColumnScope,
+    onSearch: (String) -> Unit
+) {
+    columnScope.apply {
+        var enteredText by rememberSaveable { mutableStateOf("") }
+        var errorText by rememberSaveable { mutableStateOf("") }
+        TextField(
+            modifier = Modifier
+                .fillMaxWidth()
                 .align(alignment = Alignment.CenterHorizontally),
+            value = enteredText,
+            onValueChange = {
+                enteredText = it
+                errorText = ""
+                onSearch(it)
+            },
+            keyboardActions = KeyboardActions { errorText = validate(enteredText) },
+            isError = errorText.isNotBlank(),
+            placeholder = { Text(stringResource(R.string.search_pokemon)) },
+            singleLine = true,
         )
 
-        Spacer(modifier = Modifier.size(16.dp))
-
-        Text(
-            modifier = Modifier.fillMaxWidth().align(alignment = Alignment.CenterHorizontally),
-            text = description,
-            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-            style = MaterialTheme.typography.subtitle1,
-        )
+        // Helper text if error exists
+        if(errorText.isNotBlank()) Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = errorText,
+                color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+                style = MaterialTheme.typography.caption,
+            )
     }
-}
-
-@Composable
-fun PokemonSprite(imgUrl: String, modifier: Modifier) {
-    Image(
-        painter = rememberImagePainter(data = imgUrl),
-        contentDescription = stringResource(R.string.content_description_pokemon_image),
-        modifier = modifier.wrapContentSize(),
-    )
-}
-
-@Composable
-fun NoResultsText(searchText: String? = null) {
-    // No Search results text
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        text = stringResource(id = R.string.no_results, searchText ?: "your search"),
-        color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-        style = MaterialTheme.typography.subtitle1,
-    )
 }
 
 /**
@@ -193,14 +124,4 @@ fun validate(enteredText: String, showBlankError: Boolean = false): String {
         enteredText.isBlank() && showBlankError -> "Required field"
         else -> ""
     }
-}
-
-@Composable
-fun ShowRetryScreen(message: String?) {
-    Text(
-        text = if(message.isNullOrBlank()) stringResource(id = R.string.generic_error) else message,
-        color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-        style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.fillMaxWidth()
-    )
 }

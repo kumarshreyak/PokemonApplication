@@ -16,11 +16,14 @@ class PokemonClient internal constructor(
     private var logLevel: PokemonClientLogLevel
 ) {
 
+    internal var descriptionResponse = MutableLiveData<PokemonApiResult<String>?>(null)
     suspend fun searchPokemonShakespeareDescription(pokemonName: String) : PokemonApiResult<String>  {
-        var response: PokemonApiResult<String>
+        var response = PokemonApiResult<String>()
+        descriptionResponse.value = response
         withContext(Dispatchers.IO) {
             response = fetchPokemonShakespeareDescription(species = pokemonName).toPokemonApiResult()
         }
+        descriptionResponse.value = response
         return response
     }
 

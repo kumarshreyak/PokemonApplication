@@ -19,7 +19,6 @@ import androidx.compose.ui.res.stringResource
 import coil.compose.rememberImagePainter
 import com.shrek.pokemonlibrary.R
 import com.shrek.pokemonlibrary.client.PokemonClient
-import com.shrek.pokemonlibrary.network.data.models.PokemonSprite
 
 
 @Composable
@@ -53,6 +52,43 @@ fun PokemonSpriteUI(
             } else {
                 Log.d("PokemonLogs", "ShowRetryScreen: searchText = $searchText")
                 if(showSearchFailure) ShowRetryScreen(message = image!!.error?.errorMessage)
+            }
+        }
+    }
+}
+
+
+@Composable
+fun PokemonShakespeareDescriptionUI(
+    searchText: String?,
+    showProgressLoader: Boolean = true,
+    showSearchFailure: Boolean = true,
+) {
+    val description by PokemonClient.instance().descriptionResponse.observeAsState()
+
+    if(!searchText.isNullOrBlank())
+        LaunchedEffect(key1 = searchText) {
+            PokemonClient.instance().searchPokemonShakespeareDescription(pokemonName = searchText)
+        }
+
+    // Search Result Section
+    when {
+        description == null || searchText.isNullOrBlank() -> Unit
+        description!!.isInProgress() -> {
+            Log.d("PokemonLogs", "CircularProgressIndicator: searchText = $searchText")
+            if(showProgressLoader) CircularProgressIndicator(color = MaterialTheme.colors.primary)
+        }
+        description!!.isSuccess() -> {
+            Log.d("PokemonLogs", "PokemonSpriteResult: searchText = $searchText")
+            PokemonDescriptionText(description = description!!.result!!)
+        }
+        description!!.isError() -> {
+            if(description!!.error?.httpFailureCode == 404) {
+                Log.d("PokemonLogs", "NoResultsText: searchText = $searchText")
+                if(showSearchFailure) NoResultsText(searchText = searchText)
+            } else {
+                Log.d("PokemonLogs", "ShowRetryScreen: searchText = $searchText")
+                if(showSearchFailure) ShowRetryScreen(message = description!!.error?.errorMessage)
             }
         }
     }
