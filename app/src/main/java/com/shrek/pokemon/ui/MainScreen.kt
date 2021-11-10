@@ -17,8 +17,8 @@ import androidx.lifecycle.asFlow
 import coil.compose.rememberImagePainter
 import com.shrek.pokemon.MainViewModel
 import com.shrek.pokemon.R
-import com.shrek.pokemonlibrary.client.ui.PokemonShakespeareDescriptionUI
-import com.shrek.pokemonlibrary.client.ui.PokemonSpriteUI
+import com.shrek.pokemonlibrary.client.PokemonShakespeareDescriptionUI
+import com.shrek.pokemonlibrary.client.PokemonSpriteUI
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
