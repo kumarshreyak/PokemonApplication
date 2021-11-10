@@ -1,6 +1,7 @@
 package com.shrek.pokemonlibrary.client
 
 import android.content.Context
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.shrek.pokemonlibrary.client.datahelper.fetchPokemonShakespeareDescription
 import com.shrek.pokemonlibrary.client.datahelper.fetchPokemonSprite
@@ -14,25 +15,27 @@ class PokemonClient internal constructor(
     private var logLevel: PokemonClientLogLevel
 ) {
 
-    internal var descriptionResponse = MutableLiveData<PokemonApiResult<String>?>(null)
+    internal var _descriptionResponse = MutableLiveData<PokemonApiResult<String>?>(null)
+    val descriptionResponse: LiveData<PokemonApiResult<String>?> = _descriptionResponse
     suspend fun searchPokemonShakespeareDescription(pokemonName: String) : PokemonApiResult<String>  {
         var response = PokemonApiResult<String>()
-        descriptionResponse.value = response
+        _descriptionResponse.value = response
         withContext(Dispatchers.IO) {
             response = fetchPokemonShakespeareDescription(species = pokemonName).toPokemonApiResult()
         }
-        descriptionResponse.value = response
+        _descriptionResponse.value = response
         return response
     }
 
-    internal var pokemonSpriteResponse = MutableLiveData<PokemonApiResult<PokemonSprite>?>(null)
+    internal var _pokemonSpriteResponse = MutableLiveData<PokemonApiResult<PokemonSprite>?>(null)
+    val pokemonSpriteResponse: LiveData<PokemonApiResult<PokemonSprite>?> = _pokemonSpriteResponse
     suspend fun searchPokemonSprite(pokemonName: String) : PokemonApiResult<PokemonSprite>  {
         var response = PokemonApiResult<PokemonSprite>()
-        pokemonSpriteResponse.value = response
+        _pokemonSpriteResponse.value = response
         withContext(Dispatchers.IO) {
             response = fetchPokemonSprite(pokemonName = pokemonName).toPokemonApiResult()
         }
-        pokemonSpriteResponse.value = response
+        _pokemonSpriteResponse.value = response
         return response
     }
 
