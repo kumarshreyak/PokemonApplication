@@ -23,7 +23,9 @@ class PokemonClient internal constructor(
         withContext(Dispatchers.IO) {
             response = fetchPokemonShakespeareDescription(species = pokemonName).toPokemonApiResult()
         }
-        _descriptionResponse.value = response
+        withContext(Dispatchers.Main) {
+            _descriptionResponse.value = response
+        }
         return response
     }
 
