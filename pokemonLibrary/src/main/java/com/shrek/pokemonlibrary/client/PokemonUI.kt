@@ -22,7 +22,7 @@ fun PokemonSpriteUI(
     showProgressLoader: Boolean = true,
     showSearchFailure: Boolean = true,
 ) {
-    val image by PokemonClient.instance()._pokemonSpriteResponse.observeAsState()
+    val image by PokemonClient.instance().pokemonSpriteResponse.observeAsState()
 
     if(!searchText.isNullOrBlank())
         LaunchedEffect(key1 = searchText) {
@@ -62,7 +62,7 @@ fun PokemonShakespeareDescriptionUI(
     showProgressLoader: Boolean = true,
     showSearchFailure: Boolean = true,
 ) {
-    val description by PokemonClient.instance()._descriptionResponse.observeAsState()
+    val description by PokemonClient.instance().descriptionResponse.observeAsState()
 
     if(!searchText.isNullOrBlank())
         LaunchedEffect(key1 = searchText) {

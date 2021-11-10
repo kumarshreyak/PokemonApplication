@@ -15,7 +15,7 @@ class PokemonClient internal constructor(
     private var logLevel: PokemonClientLogLevel
 ) {
 
-    internal var _descriptionResponse = MutableLiveData<PokemonApiResult<String>?>(null)
+    private var _descriptionResponse = MutableLiveData<PokemonApiResult<String>?>(null)
     val descriptionResponse: LiveData<PokemonApiResult<String>?> = _descriptionResponse
     suspend fun searchPokemonShakespeareDescription(pokemonName: String) : PokemonApiResult<String>  {
         var response = PokemonApiResult<String>()
@@ -27,7 +27,7 @@ class PokemonClient internal constructor(
         return response
     }
 
-    internal var _pokemonSpriteResponse = MutableLiveData<PokemonApiResult<PokemonSprite>?>(null)
+    private var _pokemonSpriteResponse = MutableLiveData<PokemonApiResult<PokemonSprite>?>(null)
     val pokemonSpriteResponse: LiveData<PokemonApiResult<PokemonSprite>?> = _pokemonSpriteResponse
     suspend fun searchPokemonSprite(pokemonName: String) : PokemonApiResult<PokemonSprite>  {
         var response = PokemonApiResult<PokemonSprite>()
