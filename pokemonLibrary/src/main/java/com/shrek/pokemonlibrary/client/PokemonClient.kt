@@ -37,7 +37,9 @@ class PokemonClient internal constructor(
         withContext(Dispatchers.IO) {
             response = fetchPokemonSprite(pokemonName = pokemonName).toPokemonApiResult()
         }
-        _pokemonSpriteResponse.value = response
+        withContext(Dispatchers.Main) {
+            _pokemonSpriteResponse.value = response
+        }
         return response
     }
 

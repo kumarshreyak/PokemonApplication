@@ -8,6 +8,7 @@ import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.shrek.pokemonlibrary.client.PokemonClient
 import com.shrek.pokemonlibrary.client.PokemonShakespeareDescriptionUI
+import com.shrek.pokemonlibrary.client.PokemonSpriteUI
 import com.shrek.pokemonlibrary.client.theme.PokemonLibraryTheme
 import com.shrek.pokemonlibrary.network.api.TIMEOUT
 import com.shrek.pokemonlibrary.network.data.models.PokemonShakespeareDescription
@@ -32,7 +33,6 @@ class PokemonUITest {
     @get:Rule
     val composeTestRule = createAndroidComposeRule<TestActivity>()
 
-
     @Test
     fun testPokemonShakespeareDescriptionUI_NotFoundScenario() {
         composeTestRule.setContent {
@@ -44,6 +44,22 @@ class PokemonUITest {
 
         assert(client.descriptionResponse.value?.isError() == true)
         if(client.descriptionResponse.value?.error?.httpFailureCode == 404)
+            composeTestRule.onNodeWithText(text = "Couldn\'t find any results", substring = true).assertIsDisplayed()
+        else
+            composeTestRule.onNodeWithText(text = "Something went wrong", substring = true).assertIsDisplayed()
+    }
+
+    @Test
+    fun testPokemonSpriteUI_NotFoundScenario() {
+        composeTestRule.setContent {
+            PokemonLibraryTheme { PokemonSpriteUI(searchText = "InvalidPokemonName") }
+        }
+
+        val client = PokemonClient.instance()
+        while(client.pokemonSpriteResponse.value?.isInProgress() == true) Thread.sleep(100)
+
+        assert(client.pokemonSpriteResponse.value?.isError() == true)
+        if(client.pokemonSpriteResponse.value?.error?.httpFailureCode == 404)
             composeTestRule.onNodeWithText(text = "Couldn\'t find any results", substring = true).assertIsDisplayed()
         else
             composeTestRule.onNodeWithText(text = "Something went wrong", substring = true).assertIsDisplayed()
