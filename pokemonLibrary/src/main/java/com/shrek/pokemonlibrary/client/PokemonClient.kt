@@ -1,13 +1,11 @@
 package com.shrek.pokemonlibrary.client
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.shrek.pokemonlibrary.network.api.ResultState
+import com.shrek.pokemonlibrary.client.datahelper.fetchPokemonShakespeareDescription
+import com.shrek.pokemonlibrary.client.datahelper.fetchPokemonSprite
 import com.shrek.pokemonlibrary.network.data.models.*
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class PokemonClient internal constructor(
