@@ -1,5 +1,6 @@
 package com.shrek.pokemon.ui
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.KeyboardActions
@@ -12,36 +13,29 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.asFlow
 import coil.compose.rememberImagePainter
 import com.shrek.pokemon.MainViewModel
 import com.shrek.pokemon.R
-import com.shrek.pokemon.network.api.ApiResult
-import com.shrek.pokemonlibrary.network.data.models.Pokemon
-import com.shrek.pokemonlibrary.network.data.models.PokemonApiResult
+import com.shrek.pokemonlibrary.client.ui.PokemonShakespeareDescriptionUI
+import com.shrek.pokemonlibrary.client.ui.PokemonSpriteUI
+import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.launch
 
-val DELAY_SEARCH_IN_MILLIS = 300L
+const val DELAY_SEARCH_IN_MILLIS = 300L
+const val MIN_CHARS_FOR_SEARCH = 1
 
 @Composable
 fun MainScreen(
     mainViewModel: MainViewModel,
     lifecycleOwner: LifecycleOwner,
 ) {
-    val scope = rememberCoroutineScope() // Use to make API call during retry.
-    val pokemonSearchResult by mainViewModel.searchResult.observeAsState()
-
-    // FIXME - Add debounce/throttle in search
-//    val searchText by mainViewModel.enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS)
-//        .collectAsState(response.result?.contents?.text ?: "")
-
-    val searchText by mainViewModel.enteredSearchText.observeAsState()
-
-    if(!searchText.isNullOrBlank())
-        LaunchedEffect(key1 = "searchText") { // TODO remove quotes around searchText here
-            mainViewModel.searchPokemon(searchText = searchText!!)
-        }
+    val searchText by mainViewModel.enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS)
+        .collectAsState("")
 
     Content(
-        response = pokemonSearchResult,
+        mainViewModel = mainViewModel,
+        searchText = searchText,
         onSearch = {
             mainViewModel.enteredSearchText.value = it
         }
@@ -49,7 +43,11 @@ fun MainScreen(
 }
 
 @Composable
-fun Content(response: PokemonApiResult?, onSearch: (String) -> Unit) {
+fun Content(
+    mainViewModel: MainViewModel,
+    searchText: String?,
+    onSearch: (String) -> Unit
+) {
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = MaterialTheme.colors.background
@@ -69,88 +67,48 @@ fun Content(response: PokemonApiResult?, onSearch: (String) -> Unit) {
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            // Text input field
-            var enteredText by rememberSaveable { mutableStateOf(response?.result?.name ?: "") }
-            var errorText by rememberSaveable { mutableStateOf("") }
-            TextField(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .align(alignment = Alignment.CenterHorizontally),
-                value = enteredText,
-                onValueChange = {
-                    enteredText = it
-                    errorText = ""
-                    onSearch(it)
-                },
-                keyboardActions = KeyboardActions { errorText = validate(enteredText) },
-                isError = errorText.isNotBlank(),
-                placeholder = { Text(stringResource(R.string.search_pokemon)) },
-                singleLine = true,
-            )
-
-            // Helper text if error exists
-            if(errorText.isNotBlank())
-                Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = errorText,
-                    color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-                    style = MaterialTheme.typography.caption,
-                )
+            TextFieldSection(onSearch = onSearch)
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            // FIXME - Progress state doesn't show when search text gets updated.
-            // Search Result Section
-            when {
-                response == null -> Unit // TODO think and handle this; probably as error 
-                response.isInProgress() -> CircularProgressIndicator(
-                    modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                    color = MaterialTheme.colors.primary
-                )
-                response.isSuccess() && response.result != null -> ResultSection(response.result)
-                response.isError() -> {
-                    if(response.error?.httpFailureCode == 404) NoResultsText() // Result not found
-                    else ShowRetryScreen(message = response.error?.errorMessage) // Retryable error
-                }
-            }
+            PokemonSpriteUI(searchText = searchText)
+
+            Spacer(modifier = Modifier.size(16.dp))
+
+            PokemonShakespeareDescriptionUI(searchText = searchText)
         }
     }
 }
 
 @Composable
-fun ResultSection(response: Pokemon?) {
-    Column(modifier = Modifier.fillMaxWidth()) {
-        if(response == null) {
-            NoResultsText(response?.name)
-        } else {
-            Image(
-                painter = rememberImagePainter(data = response.imgUrl),
-                contentDescription = stringResource(R.string.content_description_pokemon_image),
-                modifier = Modifier.wrapContentSize(),
-            )
-
-            Spacer(modifier = Modifier.size(16.dp))
-
-            // Search result
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = response.description,
-                color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-                style = MaterialTheme.typography.subtitle1,
-            )
-        }
-    }
-}
-
-@Composable
-fun NoResultsText(searchText: String? = null) {
-    // No Search results text
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        text = stringResource(id = R.string.no_results, searchText ?: "your search"),
-        color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-        style = MaterialTheme.typography.subtitle1,
+fun ColumnScope.TextFieldSection(
+    onSearch: (String) -> Unit
+) {
+    var enteredText by rememberSaveable { mutableStateOf("") }
+    var errorText by rememberSaveable { mutableStateOf("") }
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .align(alignment = Alignment.CenterHorizontally),
+        value = enteredText,
+        onValueChange = {
+            enteredText = it
+            errorText = ""
+            onSearch(it)
+        },
+        keyboardActions = KeyboardActions { errorText = validate(enteredText) },
+        isError = errorText.isNotBlank(),
+        placeholder = { Text(stringResource(R.string.search_pokemon)) },
+        singleLine = true,
     )
+
+    // Helper text if error exists
+    if(errorText.isNotBlank()) Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = errorText,
+            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+            style = MaterialTheme.typography.caption,
+        )
 }
 
 /**
@@ -163,14 +121,4 @@ fun validate(enteredText: String, showBlankError: Boolean = false): String {
         enteredText.isBlank() && showBlankError -> "Required field"
         else -> ""
     }
-}
-
-@Composable
-fun ShowRetryScreen(message: String?) {
-    Text(
-        text = if(message.isNullOrBlank()) stringResource(id = R.string.generic_error) else message,
-        color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-        style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.fillMaxWidth()
-    )
 }

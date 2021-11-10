@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.shrek.pokemonlibrary.network.api.ResultState
 import com.shrek.pokemonlibrary.network.data.models.*
-import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextRequest
-import com.shrek.pokemonlibrary.network.data.models.getEnglishDescription
-import com.shrek.pokemonlibrary.network.data.models.isValid
-import com.shrek.pokemonlibrary.network.repository.MainRepository
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PokemonClient internal constructor(
     private val sdkKey: String,
@@ -16,99 +16,27 @@ class PokemonClient internal constructor(
     private var logLevel: PokemonClientLogLevel
 ) {
 
-    private val _searchResult = MutableLiveData(PokemonApiResult())
-    val pokemonSearchResult: LiveData<PokemonApiResult> = _searchResult
-
-    suspend fun searchPokemon(searchText: String) : LiveData<PokemonApiResult> {
-        _searchResult.value = PokemonApiResult()
-        fetchPokemon(
-            searchText = searchText,
-            onError = { apiError ->
-                _searchResult.value = PokemonApiResult().apply {
-                    resultState = ResultState.ERROR
-                    error = apiError?.toPokemonError()
-                }
-            },
-            onSuccess = { pokemon ->
-                _searchResult.value = PokemonApiResult().apply {
-                    resultState = ResultState.SUCCESS
-                    result = pokemon
-                }
-            },
-        )
-        return pokemonSearchResult
-    }
-
-
-    private suspend fun fetchPokemon(
-        searchText: String,
-        onError: ((pokemonError: Throwable?) -> Unit)? = null,
-        onSuccess: (pokemon: Pokemon) -> Unit
-    ) {
-        val pokemonResponse = MainRepository.getPokemon(searchText)
-        when {
-            pokemonResponse.isSuccess() -> {
-                if(pokemonResponse.result?.isValid() == true) {
-                    val species = pokemonResponse.result.species?.name!!
-                    val imgUrl = pokemonResponse.result.sprites?.frontDefault!!
-                    fetchPokemonSpecies(species = species, onError = onError) {
-                        onSuccess(
-                                Pokemon(
-                                name = pokemonResponse.result.name,
-                                description = it,
-                                imgUrl = imgUrl
-                            )
-                        )
-                    }
-                } else {
-                    onError?.invoke(Throwable("Species/Image of pokemon not found"))
-                }
-            }
-            pokemonResponse.isError() -> onError?.invoke(pokemonResponse.error)
-            else -> Unit
+    internal var descriptionResponse = MutableLiveData<PokemonApiResult<String>?>(null)
+    suspend fun searchPokemonShakespeareDescription(pokemonName: String) : PokemonApiResult<String>  {
+        var response = PokemonApiResult<String>()
+        descriptionResponse.value = response
+        withContext(Dispatchers.IO) {
+            response = fetchPokemonShakespeareDescription(species = pokemonName).toPokemonApiResult()
         }
+        descriptionResponse.value = response
+        return response
     }
 
-    private suspend fun fetchPokemonSpecies(
-        species: String,
-        onError: ((error: Throwable?) -> Unit)? = null,
-        onSuccess: (translatedDescription: String) -> Unit,
-    ) {
-        val pokemonSpeciesResponse = MainRepository.getPokemonSpecies(species)
-        when {
-            pokemonSpeciesResponse.isSuccess() -> {
-                if(!pokemonSpeciesResponse.result?.getEnglishDescription().isNullOrBlank()) {
-                    val englishDescription = pokemonSpeciesResponse.result?.getEnglishDescription()!!
-                     fetchShakespeareDescription(text = englishDescription, onSuccess = onSuccess, onError = onError)
-                } else {
-                    onError?.invoke(Throwable("No description found for Pokemon"))
-                }
-            }
-            pokemonSpeciesResponse.isError() -> onError?.invoke(pokemonSpeciesResponse.error)
-            else -> Unit
+    internal var pokemonSpriteResponse = MutableLiveData<PokemonApiResult<PokemonSprite>?>(null)
+    suspend fun searchPokemonSprite(pokemonName: String) : PokemonApiResult<PokemonSprite>  {
+        var response = PokemonApiResult<PokemonSprite>()
+        pokemonSpriteResponse.value = response
+        withContext(Dispatchers.IO) {
+            response = fetchPokemonSprite(pokemonName = pokemonName).toPokemonApiResult()
         }
+        pokemonSpriteResponse.value = response
+        return response
     }
-
-    private suspend fun fetchShakespeareDescription(
-        text: String,
-        onSuccess: (description: String) -> Unit,
-        onError: ((error: Throwable?) -> Unit)? = null,
-    ) {
-        val response = MainRepository.getShakespeareText(GetShakespeareTextRequest(text = text))
-        when {
-            response.isSuccess() -> {
-                val translatedText = response.result?.contents?.translated
-                if(translatedText.isNullOrBlank()) {
-                    onError?.invoke(Throwable("No translation found for description of Pokemon"))
-                } else {
-                    onSuccess(translatedText)
-                }
-            }
-            response.isError() -> onError?.invoke(Throwable(response.error))
-            else -> Unit
-        }
-    }
-
 
     /**
      * @param sdkKey Unique identifier for anyone using this SDK. Just a placeholder for now.

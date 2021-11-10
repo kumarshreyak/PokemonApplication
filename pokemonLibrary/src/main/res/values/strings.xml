@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="content_description_pokemon_image">Pokemon search result image</string>
+    <string name="generic_error">Something went wrong, please try again later.</string>
+    <string name="no_results">Couldn\'t find any results for %s</string>
+    <string name="search_pokemon">Search Pokemon</string>
+</resources>
