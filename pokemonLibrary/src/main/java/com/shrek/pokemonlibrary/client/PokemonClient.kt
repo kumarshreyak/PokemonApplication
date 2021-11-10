@@ -24,11 +24,14 @@ class PokemonClient internal constructor(
         return response
     }
 
+    internal var pokemonSpriteResponse = MutableLiveData<PokemonApiResult<PokemonSprite>?>(null)
     suspend fun searchPokemonSprite(pokemonName: String) : PokemonApiResult<PokemonSprite>  {
         var response = PokemonApiResult<PokemonSprite>()
+        pokemonSpriteResponse.value = response
         withContext(Dispatchers.IO) {
             response = fetchPokemonSprite(pokemonName = pokemonName).toPokemonApiResult()
         }
+        pokemonSpriteResponse.value = response
         return response
     }
 

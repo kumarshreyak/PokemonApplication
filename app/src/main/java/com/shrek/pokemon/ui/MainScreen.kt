@@ -17,6 +17,7 @@ import androidx.lifecycle.asFlow
 import coil.compose.rememberImagePainter
 import com.shrek.pokemon.MainViewModel
 import com.shrek.pokemon.R
+import com.shrek.pokemonlibrary.client.ui.PokemonSpriteUI
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.launch
 
@@ -34,13 +35,13 @@ fun MainScreen(
     val searchText by mainViewModel.enteredSearchText.asFlow().debounce(DELAY_SEARCH_IN_MILLIS)
         .collectAsState("")
 
-    if(!searchText.isNullOrBlank() && searchText.length > MIN_CHARS_FOR_SEARCH)
-        LaunchedEffect(key1 = searchText) {
-            scope.launch {
-                mainViewModel.searchPokemon(searchText = searchText!!)
-            }
-        }
-
+//    if(!searchText.isNullOrBlank() && searchText.length > MIN_CHARS_FOR_SEARCH)
+//        LaunchedEffect(key1 = searchText) {
+//            scope.launch {
+//                mainViewModel.searchPokemon(searchText = searchText!!)
+//            }
+//        }
+//
     Content(
         mainViewModel = mainViewModel,
         searchText = searchText,
@@ -105,37 +106,38 @@ fun Content(
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            val description by mainViewModel.description.observeAsState()
-            val image by mainViewModel.sprite.observeAsState()
-            // FIXME - some intermeditate states show somehow, RCA and fix that.
-            // Search Result Section
-            when {
-                description == null || image == null || searchText.isNullOrBlank() -> Unit
-                (description!!.isInProgress() || image!!.isInProgress()) || enteredText != searchText -> {
-                    Log.d("PokemonLogs", "CircularProgressIndicator: searchText = $searchText, enteredText = $enteredText")
-                    CircularProgressIndicator(
-                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
-                        color = MaterialTheme.colors.primary
-                    )
-                }
-                (description!!.isSuccess() && image!!.isSuccess()) -> {
-                    Log.d("PokemonLogs", "ResultSection: searchText = $searchText, enteredText = $enteredText")
-                    ResultSection(
-                        imageUrl = image!!.result!!.imgUrl,
-                        description = description!!.result!!
-                    )
-                }
-                (description!!.isError() || image!!.isError()) -> {
-                    if(description?.error?.httpFailureCode == 404 ||
-                        image?.error?.httpFailureCode == 404) {
-                        Log.d("PokemonLogs", "NoResultsText: searchText = $searchText, enteredText = $enteredText")
-                        NoResultsText(searchText = searchText)
-                    } else {
-                        Log.d("PokemonLogs", "ShowRetryScreen: searchText = $searchText, enteredText = $enteredText")
-                        ShowRetryScreen(message = description?.error?.errorMessage)
-                    }
-                }
-            }
+            PokemonSpriteUI(searchText = searchText)
+//            val description by mainViewModel.description.observeAsState()
+//            val image by mainViewModel.sprite.observeAsState()
+//            // FIXME - some intermeditate states show somehow, RCA and fix that.
+//            // Search Result Section
+//            when {
+//                description == null || image == null || searchText.isNullOrBlank() -> Unit
+//                (description!!.isInProgress() || image!!.isInProgress()) || enteredText != searchText -> {
+//                    Log.d("PokemonLogs", "CircularProgressIndicator: searchText = $searchText, enteredText = $enteredText")
+//                    CircularProgressIndicator(
+//                        modifier = Modifier.align(alignment = Alignment.CenterHorizontally),
+//                        color = MaterialTheme.colors.primary
+//                    )
+//                }
+//                (description!!.isSuccess() && image!!.isSuccess()) -> {
+//                    Log.d("PokemonLogs", "ResultSection: searchText = $searchText, enteredText = $enteredText")
+//                    ResultSection(
+//                        imageUrl = image!!.result!!.imgUrl,
+//                        description = description!!.result!!
+//                    )
+//                }
+//                (description!!.isError() || image!!.isError()) -> {
+//                    if(description?.error?.httpFailureCode == 404 ||
+//                        image?.error?.httpFailureCode == 404) {
+//                        Log.d("PokemonLogs", "NoResultsText: searchText = $searchText, enteredText = $enteredText")
+//                        NoResultsText(searchText = searchText)
+//                    } else {
+//                        Log.d("PokemonLogs", "ShowRetryScreen: searchText = $searchText, enteredText = $enteredText")
+//                        ShowRetryScreen(message = description?.error?.errorMessage)
+//                    }
+//                }
+//            }
         }
     }
 }
@@ -159,6 +161,15 @@ fun ResultSection(imageUrl: String, description: String) {
             style = MaterialTheme.typography.subtitle1,
         )
     }
+}
+
+@Composable
+fun PokemonSprite(imgUrl: String, modifier: Modifier) {
+    Image(
+        painter = rememberImagePainter(data = imgUrl),
+        contentDescription = stringResource(R.string.content_description_pokemon_image),
+        modifier = modifier.wrapContentSize(),
+    )
 }
 
 @Composable
