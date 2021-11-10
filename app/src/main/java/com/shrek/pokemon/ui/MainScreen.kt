@@ -67,7 +67,7 @@ fun Content(
 
             Spacer(modifier = Modifier.size(16.dp))
 
-            TextFieldSection(columnScope = this, onSearch = onSearch)
+            TextFieldSection(onSearch = onSearch)
 
             Spacer(modifier = Modifier.size(16.dp))
 
@@ -81,37 +81,34 @@ fun Content(
 }
 
 @Composable
-fun TextFieldSection(
-    columnScope: ColumnScope,
+fun ColumnScope.TextFieldSection(
     onSearch: (String) -> Unit
 ) {
-    columnScope.apply {
-        var enteredText by rememberSaveable { mutableStateOf("") }
-        var errorText by rememberSaveable { mutableStateOf("") }
-        TextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .align(alignment = Alignment.CenterHorizontally),
-            value = enteredText,
-            onValueChange = {
-                enteredText = it
-                errorText = ""
-                onSearch(it)
-            },
-            keyboardActions = KeyboardActions { errorText = validate(enteredText) },
-            isError = errorText.isNotBlank(),
-            placeholder = { Text(stringResource(R.string.search_pokemon)) },
-            singleLine = true,
-        )
+    var enteredText by rememberSaveable { mutableStateOf("") }
+    var errorText by rememberSaveable { mutableStateOf("") }
+    TextField(
+        modifier = Modifier
+            .fillMaxWidth()
+            .align(alignment = Alignment.CenterHorizontally),
+        value = enteredText,
+        onValueChange = {
+            enteredText = it
+            errorText = ""
+            onSearch(it)
+        },
+        keyboardActions = KeyboardActions { errorText = validate(enteredText) },
+        isError = errorText.isNotBlank(),
+        placeholder = { Text(stringResource(R.string.search_pokemon)) },
+        singleLine = true,
+    )
 
-        // Helper text if error exists
-        if(errorText.isNotBlank()) Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = errorText,
-                color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
-                style = MaterialTheme.typography.caption,
-            )
-    }
+    // Helper text if error exists
+    if(errorText.isNotBlank()) Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = errorText,
+            color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
+            style = MaterialTheme.typography.caption,
+        )
 }
 
 /**
