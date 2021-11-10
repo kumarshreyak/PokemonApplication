@@ -36,7 +36,7 @@ class PokemonUITest {
     val composeTestRule = createAndroidComposeRule<TestActivity>()
 
     @Test
-    fun testPokemonShakespeareDescriptionUI_NotFoundScenario() {
+    fun testPokemonShakespeareDescriptionUI_ErrorScenario() {
         composeTestRule.setContent {
             PokemonLibraryTheme { PokemonShakespeareDescriptionUI(searchText = "InvalidPokemonName") }
         }
@@ -52,7 +52,7 @@ class PokemonUITest {
     }
 
     @Test
-    fun testPokemonSpriteUI_NotFoundScenario() {
+    fun testPokemonSpriteUI_ErrorScenario() {
         composeTestRule.setContent {
             PokemonLibraryTheme { PokemonSpriteUI(searchText = "InvalidPokemonName") }
         }
