@@ -8,6 +8,8 @@ import com.shrek.pokemonlibrary.client.datahelper.fetchPokemonSprite
 import com.shrek.pokemonlibrary.network.data.models.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import java.util.*
+import java.util.Locale.ENGLISH
 
 class PokemonClient internal constructor(
     private val sdkKey: String,
@@ -21,7 +23,7 @@ class PokemonClient internal constructor(
         var response = PokemonApiResult<String>()
         _descriptionResponse.value = response
         withContext(Dispatchers.IO) {
-            response = fetchPokemonShakespeareDescription(species = pokemonName).toPokemonApiResult()
+            response = fetchPokemonShakespeareDescription(species = pokemonName.lowercase()).toPokemonApiResult()
         }
         withContext(Dispatchers.Main) {
             _descriptionResponse.value = response
@@ -35,7 +37,7 @@ class PokemonClient internal constructor(
         var response = PokemonApiResult<PokemonSprite>()
         _pokemonSpriteResponse.value = response
         withContext(Dispatchers.IO) {
-            response = fetchPokemonSprite(pokemonName = pokemonName).toPokemonApiResult()
+            response = fetchPokemonSprite(pokemonName = pokemonName.lowercase()).toPokemonApiResult()
         }
         withContext(Dispatchers.Main) {
             _pokemonSpriteResponse.value = response
