@@ -3,6 +3,14 @@ package com.shrek.pokemonlibrary.network.data.models
 import com.shrek.pokemonlibrary.network.api.ApiResult
 import com.shrek.pokemonlibrary.network.api.ResultState
 
+/**
+ * This is a wrapper class which will be used to return result after any SDK call
+ * from [PokemonClient][com.shrek.pokemonlibrary.client.PokemonClient]
+ * @param [resultState][ResultState] State of sdk call, one of - [ResultState.IN_PROGRESS], [ResultState.SUCCESS], [ResultState.ERROR]
+ * @param [error] Error after completion of sdk call. @see [PokemonError]
+ * @param [result] Result after sdk call.
+ * eg. for [searchPokemonShakespeareDescription][com.shrek.pokemonlibrary.client.PokemonClient.searchPokemonShakespeareDescription] - [PokemonApiResult]<[String]> is returned
+ */
 data class PokemonApiResult<T>(
     var resultState: ResultState = ResultState.IN_PROGRESS,
     var error: PokemonError? = null,

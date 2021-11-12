@@ -1,6 +1,6 @@
 package com.shrek.pokemonlibrary.network.data.models
 
-data class GetPokemonSpeciesResponse (
+internal data class GetPokemonSpeciesResponse (
     var id : Int,
     var name : String,
     var flavorTextEntries : List<FlavorTextEntries>,
@@ -10,14 +10,14 @@ data class GetPokemonSpeciesResponse (
     }
 }
 
-data class FlavorTextEntries (
+internal data class FlavorTextEntries (
     var flavorText : String,
     var language : Language,
 )
 
-data class Language (
+internal data class Language (
     var name : String,
     var url : String
 )
 
-fun GetPokemonSpeciesResponse.getEnglishDescription() = flavorTextEntries.firstOrNull { it.language.name == GetPokemonSpeciesResponse.LANGUAGE_ENGLISH }?.flavorText
+internal fun GetPokemonSpeciesResponse.getEnglishDescription() = flavorTextEntries.firstOrNull { it.language.name == GetPokemonSpeciesResponse.LANGUAGE_ENGLISH }?.flavorText

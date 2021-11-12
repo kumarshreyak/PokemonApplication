@@ -7,7 +7,7 @@ import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextResponse
 import retrofit2.Response
 import retrofit2.http.*
 
-interface MainService {
+internal interface MainService {
     @GET
     suspend fun getPokemon(
         @Url url: String,

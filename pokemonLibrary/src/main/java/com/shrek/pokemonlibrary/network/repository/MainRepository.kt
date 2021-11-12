@@ -8,7 +8,7 @@ import com.shrek.pokemonlibrary.network.data.models.GetPokemonSpeciesResponse
 import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextRequest
 import com.shrek.pokemonlibrary.network.data.models.GetShakespeareTextResponse
 
-object MainRepository {
+internal object MainRepository {
 
     private const val POKEMON_URL = "https://pokeapi.co/api/v2/pokemon/"
     suspend fun getPokemon(name: String) : ApiResult<GetPokemonResponse> {

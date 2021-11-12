@@ -1,4 +1,4 @@
-package com.shrek.pokemonlibrary.client
+package com.shrek.pokemonlibrary.client.datahelper
 
 import com.shrek.pokemonlibrary.network.api.ApiResult
 import com.shrek.pokemonlibrary.network.data.models.*

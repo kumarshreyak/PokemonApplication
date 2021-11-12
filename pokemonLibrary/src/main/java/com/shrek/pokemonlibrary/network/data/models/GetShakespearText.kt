@@ -1,6 +1,6 @@
 package com.shrek.pokemonlibrary.network.data.models
 
-class GetShakespeareTextResponse(
+internal class GetShakespeareTextResponse(
     val success : SuccessProps?,
     val contents: ContentProps?,
 ) {
@@ -8,4 +8,4 @@ class GetShakespeareTextResponse(
     class ContentProps(val translated: String?, val text: String?, val translation: String?)
 }
 
-class GetShakespeareTextRequest(val text : String)
+internal class GetShakespeareTextRequest(val text : String)
