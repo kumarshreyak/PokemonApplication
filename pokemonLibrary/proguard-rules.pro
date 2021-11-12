@@ -20,5 +20,4 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keep class com.shrek.pokemonlibrary.client.PokemonClient {*;}
--keep class com.shrek.pokemonlibrary.client.PokemonUIKt {*;}
+-keep class com.shrek.pokemonlibrary.client.** {*;}
