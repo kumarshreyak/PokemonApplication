@@ -2,28 +2,17 @@ package com.shrek.pokemonlibrary
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.shrek.pokemonlibrary.client.PokemonClient
 import com.shrek.pokemonlibrary.client.PokemonShakespeareDescriptionUI
 import com.shrek.pokemonlibrary.client.PokemonSpriteUI
 import com.shrek.pokemonlibrary.client.theme.PokemonLibraryTheme
-import com.shrek.pokemonlibrary.network.api.TIMEOUT
-import com.shrek.pokemonlibrary.network.data.models.PokemonShakespeareDescription
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
-import okhttp3.internal.wait
-
+import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
-import org.junit.Rule
 
 /**
  * Instrumented test, which will execute on an Android device.

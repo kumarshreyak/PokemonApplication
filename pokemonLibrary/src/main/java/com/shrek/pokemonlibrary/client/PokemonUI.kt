@@ -13,8 +13,10 @@ import com.shrek.pokemonlibrary.client.ui.PokemonSpriteImage
 import com.shrek.pokemonlibrary.client.ui.ShowRetryScreen
 
 /**
- * UI to display Pokemon image for the search.
- * @param searchText Text to search pokemon image for
+ * UI to display Pokemon's sprite (image).
+ * This UI internally manages the search and progress/error states all you need to provide is the [searchText].
+ * The state of the search performed here can be observed by observing [PokemonClient.pokemonSpriteResponse] livedata.
+ * @param searchText Pokemon name to search for.
  */
 @Composable
 fun PokemonSpriteUI(
@@ -53,8 +55,10 @@ fun PokemonSpriteUI(
 }
 
 /**
- * UI to display Pokemon shakespeare description for the search.
- * @param searchText Text to search pokemon description for
+ * UI to display Pokemon's shakespeare description.
+ * This UI internally manages the search and progress/error states all you need to provide is the [searchText].
+ * The state of the search performed here can be observed by observing [PokemonClient.descriptionResponse] livedata.
+ * @param searchText Pokemon name to search for.
  */
 @Composable
 fun PokemonShakespeareDescriptionUI(
@@ -69,7 +73,6 @@ fun PokemonShakespeareDescriptionUI(
             PokemonClient.instance().searchPokemonShakespeareDescription(pokemonName = searchText)
         }
 
-    // Search Result Section
     when {
         description == null || searchText.isNullOrBlank() -> Unit
         description!!.isInProgress() -> {

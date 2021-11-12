@@ -23,7 +23,7 @@ import com.shrek.pokemonlibrary.client.PokemonClient
 
 
 @Composable
-fun NoResultsText(searchText: String? = null) {
+internal fun NoResultsText(searchText: String? = null) {
     Text(
         modifier = Modifier.fillMaxWidth(),
         text = stringResource(id = R.string.no_results, searchText ?: "your search"),
@@ -33,7 +33,7 @@ fun NoResultsText(searchText: String? = null) {
 }
 
 @Composable
-fun ShowRetryScreen(message: String?) {
+internal fun ShowRetryScreen(message: String?) {
     Text(
         text = if(message.isNullOrBlank()) stringResource(id = R.string.generic_error) else message,
         color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
@@ -43,7 +43,7 @@ fun ShowRetryScreen(message: String?) {
 }
 
 @Composable
-fun PokemonSpriteImage(
+internal fun PokemonSpriteImage(
     imageUrl: String,
     modifier: Modifier = Modifier,
 ) {
@@ -56,7 +56,7 @@ fun PokemonSpriteImage(
 
 
 @Composable
-fun PokemonDescriptionText(
+internal fun PokemonDescriptionText(
     description: String,
     modifier: Modifier = Modifier
 ) {
