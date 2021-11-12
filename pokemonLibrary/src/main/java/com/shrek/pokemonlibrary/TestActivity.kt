@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import com.shrek.pokemonlibrary.client.PokemonClient
 
-class TestActivity : ComponentActivity() {
+internal class TestActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
