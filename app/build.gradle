@@ -69,7 +69,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.shrek.Pokemon-release:1.1'
+    implementation 'com.github.kumarshreyak:PokemonApplication:1.1.0'
 //    implementation project(":pokemonLibrary")
 
     // Kotlin and ktx
