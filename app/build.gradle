@@ -4,6 +4,18 @@ plugins {
 }
 
 android {
+    signingConfigs {
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+
+            // Optional, specify signing versions used
+            v1SigningEnabled true
+            v2SigningEnabled true
+        }
+    }
     compileSdk 31
 
     defaultConfig {
@@ -18,8 +30,10 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
@@ -55,8 +69,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'com.github.kumarshreyak:PokemonApplication:master-SNAPSHOT'
-
+//    implementation 'com.github.kumarshreyak:PokemonApplication:master-SNAPSHOT'
+    implementation project(":pokemonLibrary")
 
     // Kotlin and ktx
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'

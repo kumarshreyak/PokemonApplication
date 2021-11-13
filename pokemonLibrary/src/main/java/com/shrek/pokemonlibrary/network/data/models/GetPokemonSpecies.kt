@@ -20,4 +20,4 @@ internal data class Language (
     var url : String
 )
 
-internal fun GetPokemonSpeciesResponse.getEnglishDescription() = flavorTextEntries.firstOrNull { it.language.name == GetPokemonSpeciesResponse.LANGUAGE_ENGLISH }?.flavorText
+internal fun GetPokemonSpeciesResponse.getEnglishDescription() = flavorTextEntries?.firstOrNull { it.language.name == GetPokemonSpeciesResponse.LANGUAGE_ENGLISH }?.flavorText
