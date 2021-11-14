@@ -27,12 +27,12 @@ Refer [PokemonClient](https://github.com/kumarshreyak/PokemonApplication/blob/ma
 For example usage in an app please refer the [example app](https://github.com/kumarshreyak/PokemonApplication/tree/master/app) in this project
 
 
-If you already use compose you can simple include the UI in your composable function, just pass the updated search text in the parameters -
+If you already use compose you can simply include the UI in your composable function -
 ```
 @Composable
 fun YourComposableFunction() {
 	...
-	PokemonSpriteUI(searchText)
+	PokemonShakespeareDescriptionUI(searchText = searchText)
 	...
 }
 ```
@@ -48,6 +48,18 @@ If you want to use a Compose in your XML file, you can add this to your layout f
 Then just set `pokemonLibrary`'s composable on this view -
 ```
 findViewById<ComposeView>(R.id.my_composable).setContent {
-	PokemonSpriteUI(searchText)
+	PokemonSpriteUI(searchText = searchText)
 }
+```
+
+UI's layout can be modified like this -
+```
+PokemonSpriteUI(
+    searchText = searchText,
+    modifier = Modifier
+	.align(Alignment.CenterHorizontally),
+    imageModifier = Modifier
+	.size(200.dp)
+	.align(Alignment.CenterHorizontally)
+)
 ```
