@@ -1,7 +1,7 @@
 # PokemonApplication
 This project contains `pokemonLibrary` which is a sdk that helps you search for pokemon names, get their image and description in a Shakespeare-esque translation.
 
-## How to add pokemonLibrary to your project
+## How to add `pokemonLibrary` to your project
 Add `jitpack` dependency to your project-level build.gradle file
 ```
 allprojects {
@@ -44,7 +44,7 @@ If you want to use a Compose in your XML file, you can add this to your layout f
     android:layout_height="wrap_content" />
 ```
 
-Then just set pokemonLibrary's composable on this view -
+Then just set `pokemonLibrary`'s composable on this view -
 ```
 findViewById<ComposeView>(R.id.my_composable).setContent {
 	PokemonSpriteUI(searchText)
