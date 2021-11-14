@@ -5,10 +5,10 @@ This project contains `pokemonLibrary` which is a sdk that helps you search for 
 Add `jitpack` dependency to your project-level build.gradle file
 ```
 allprojects {
-		repositories {
-			...
-			maven { url 'https://jitpack.io' }
-		}
+	repositories {
+		...
+		maven { url 'https://jitpack.io' }
+	}
 }
 ```
 
