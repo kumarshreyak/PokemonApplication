@@ -21,8 +21,7 @@
 #-renamesourcefileattribute SourceFile
 
 -keep class com.shrek.pokemonlibrary.network.data.** { *; }
--keep class com.shrek.pokemonlibrary.client.PokemonUIKt { *; }
--keep class com.shrek.pokemonlibrary.client.PokemonClient { *; }
+-keep class com.shrek.pokemonlibrary.client.** { *; }
 
 
 #Okhttp

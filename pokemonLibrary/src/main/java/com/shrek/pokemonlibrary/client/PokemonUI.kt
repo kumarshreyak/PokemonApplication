@@ -7,10 +7,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
-import com.shrek.pokemonlibrary.client.ui.NoResultsText
-import com.shrek.pokemonlibrary.client.ui.PokemonDescriptionText
-import com.shrek.pokemonlibrary.client.ui.PokemonSpriteImage
-import com.shrek.pokemonlibrary.client.ui.ShowRetryScreen
+import com.shrek.pokemonlibrary.ui.NoResultsText
+import com.shrek.pokemonlibrary.ui.PokemonDescriptionText
+import com.shrek.pokemonlibrary.ui.PokemonSpriteImage
+import com.shrek.pokemonlibrary.ui.ShowRetryScreen
 
 /**
  * UI to display Pokemon's sprite (image).
