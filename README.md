@@ -24,7 +24,10 @@ To find our the latest release version please check out the [Releases section](h
 All UI in this library is made in Jetpack Compose ❤️ 🚀
 
 Refer [PokemonClient](https://github.com/kumarshreyak/PokemonApplication/blob/master/gfmPartial/pokemon-library/com.shrek.pokemonlibrary.client/index.md) for the SDK javadoc.
-For example usage in an app please refer the [example app](https://github.com/kumarshreyak/PokemonApplication/tree/master/app) in this project
+
+Refer complete javadoc [here](https://github.com/kumarshreyak/PokemonApplication/blob/master/gfmPartial/index.md)
+
+For example usage in an app please refer the [example app](https://github.com/kumarshreyak/PokemonApplication/tree/master/app) in this project.
 
 
 If you already use compose you can simply include the UI in your composable function -
