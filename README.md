@@ -15,7 +15,7 @@ allprojects {
 Add `pokemonLibrary` to your app-level build.gradle file.
 ```
 dependencies {
-    implementation 'com.github.kumarshreyak.PokemonApplication:pokemonlibrary-release:1.0.2'
+    implementation 'com.github.kumarshreyak.PokemonApplication:pokemonlibrary-release:1.0.3'
 }
 ```
 To find our the latest release version please check out the [Releases section](https://github.com/kumarshreyak/PokemonApplication/releases) on this repo.
