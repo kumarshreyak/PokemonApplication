@@ -3,6 +3,7 @@ apply plugin: 'kotlin-android'
 //apply plugin: 'kotlin-parcelize'
 //apply plugin: 'kotlin-kapt'
 apply plugin: 'maven-publish'
+apply plugin: 'org.jetbrains.dokka'
 
 android {
     compileSdk 31
