@@ -1,64 +1,59 @@
-plugins {
-    id 'com.android.application'
-    id 'org.jetbrains.kotlin.android'
-}
+apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-parcelize'
+apply plugin: 'kotlin-kapt'
 
 android {
-    signingConfigs {
-        release {
-            storeFile file(RELEASE_STORE_FILE)
-            storePassword RELEASE_STORE_PASSWORD
-            keyAlias RELEASE_KEY_ALIAS
-            keyPassword RELEASE_KEY_PASSWORD
-
-            // Optional, specify signing versions used
-            v1SigningEnabled true
-            v2SigningEnabled true
-        }
+    buildFeatures {
+        compose = true
     }
-    compileSdk 31
-
     defaultConfig {
         applicationId "com.shrek.pokemon"
         minSdk 21
         targetSdk 31
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+    }
+
+    compileSdk 31
+    signingConfigs {
+        release {
+            storeFile file(RELEASE_STORE_FILE)
+            storePassword RELEASE_STORE_PASSWORD
+            keyAlias RELEASE_KEY_ALIAS
+            keyPassword RELEASE_KEY_PASSWORD
+        }
     }
 
     buildTypes {
         release {
             minifyEnabled true
-            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = '1.8'
-    }
-    buildFeatures {
-        compose true
+        jvmTarget = '11'
     }
     composeOptions {
-        kotlinCompilerExtensionVersion '1.0.1'
+        kotlinCompilerExtensionVersion '1.0.3'
+        kotlinCompilerVersion '1.5.30'
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-    buildToolsVersion '31.0.0'
 }
 
 dependencies {
-
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
@@ -70,8 +65,8 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
 //    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-//    implementation 'com.github.kumarshreyak:PokemonApplication:1.1.0'
-    implementation project(":pokemonLibrary")
+    implementation 'com.github.kumarshreyak.PokemonApplication:pokemonlibrary-release:shreyak~gradle-migrate-SNAPSHOT'
+//    implementation project(":pokemonLibrary")
 
     // Kotlin and ktx
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.2'
@@ -115,7 +110,7 @@ dependencies {
     ///////////////////////////////////////////////////////////////////////////
     // Jetpack Compose
     ///////////////////////////////////////////////////////////////////////////
-    def compose_version = "1.0.5"
+    def compose_version = "1.0.3"
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
@@ -129,5 +124,4 @@ dependencies {
     implementation "androidx.navigation:navigation-compose:2.4.0-beta02"
     implementation "androidx.compose.ui:ui-tooling-preview:$compose_version"
     androidTestImplementation "androidx.compose.ui:ui-test-junit4:$compose_version"
-
 }

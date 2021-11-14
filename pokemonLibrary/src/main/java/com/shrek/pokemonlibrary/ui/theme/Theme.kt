@@ -1,4 +1,4 @@
-package com.shrek.pokemonlibrary.client.theme
+package com.shrek.pokemonlibrary.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

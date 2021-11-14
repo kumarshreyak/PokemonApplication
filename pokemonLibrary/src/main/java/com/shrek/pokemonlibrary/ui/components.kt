@@ -1,4 +1,4 @@
-package com.shrek.pokemonlibrary.client.ui
+package com.shrek.pokemonlibrary.ui
 
 import android.util.Log
 import androidx.compose.foundation.Image

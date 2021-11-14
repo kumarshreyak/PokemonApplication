@@ -1,15 +1,19 @@
-plugins {
-    id 'com.android.library'
-    id 'org.jetbrains.kotlin.android'
-    id 'maven-publish'
-}
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+//apply plugin: 'kotlin-parcelize'
+//apply plugin: 'kotlin-kapt'
+apply plugin: 'maven-publish'
 
 android {
     compileSdk 31
-
+    buildFeatures {
+        compose = true
+    }
     defaultConfig {
         minSdk 21
         targetSdk 31
+        versionCode 1
+        versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles "proguard-rules.pro"
@@ -23,24 +27,21 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     kotlinOptions {
         jvmTarget = '11'
-    }
-    buildFeatures {
-        compose true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion '1.0.1'
     }
     packagingOptions {
         resources {
             excludes += '/META-INF/{AL2.0,LGPL2.1}'
         }
     }
-    buildToolsVersion '31.0.0'
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.0.3'
+        kotlinCompilerVersion '1.5.30'
+    }
 }
 // Because the components are created only during the afterEvaluate phase, you must
 // configure your publications using the afterEvaluate() lifecycle method.
@@ -55,7 +56,16 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.shrek'
                 artifactId = 'pokemonlibrary-release'
-                version = '1.0.0'
+                version = '1.0.1'
+            }
+            // Creates a Maven publication called “debug”.
+            debug(MavenPublication) {
+                // Applies the component for the debug build variant.
+                from components.debug
+
+                groupId = 'com.shrek'
+                artifactId = 'pokemonlibrary-debug'
+                version = '1.0.1'
             }
         }
     }
@@ -83,7 +93,7 @@ dependencies {
     ///////////////////////////////////////////////////////////////////////////
     // Jetpack Compose
     ///////////////////////////////////////////////////////////////////////////
-    def compose_version = "1.0.5"
+    def compose_version = "1.0.3"
     implementation "androidx.compose.ui:ui:$compose_version"
     implementation "androidx.compose.material:material:$compose_version"
     implementation "androidx.compose.ui:ui-tooling:$compose_version"
