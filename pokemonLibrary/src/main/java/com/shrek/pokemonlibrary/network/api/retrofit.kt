@@ -23,24 +23,12 @@ private val okHttpClient: OkHttpClient by lazy {
             .readTimeout(TIMEOUT, TimeUnit.SECONDS)
             .connectTimeout(TIMEOUT, TimeUnit.SECONDS)
             .addInterceptor(httpLoggingInterceptor)
-            .addInterceptor(userAuthInterceptor)
             .build()
 }
 
 private val httpLoggingInterceptor by lazy {
     HttpLoggingInterceptor()
             .setLevel(if (BuildConfig.DEBUG) BODY else NONE)
-}
-
-// TODO update this accordingly later.
-private val userAuthInterceptor by lazy {
-    Interceptor { chain ->
-        val request = chain.request()
-        val updatedRequest = request.newBuilder()
-                .addHeader("Authorization", "Bearer something")
-                .build()
-        chain.proceed(updatedRequest)
-    }
 }
 
 val retrofit: Retrofit by lazy {
