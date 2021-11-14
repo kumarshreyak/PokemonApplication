@@ -1,0 +1,84 @@
+$dokka.format:gfm-v1
+$dokka.linkExtension:md
+$dokka.location:com.shrek.pokemonlibrary.client////PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/index.md
+$dokka.location:com.shrek.pokemonlibrary.client//PokemonShakespeareDescriptionUI/#kotlin.String?#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-shakespeare-description-u-i.md
+$dokka.location:com.shrek.pokemonlibrary.client//PokemonSpriteUI/#kotlin.String?#kotlin.Boolean#kotlin.Boolean/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-sprite-u-i.md
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient.Builder///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-client/-builder/index.md
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient.Builder/Builder/#kotlin.String#android.content.Context/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-client/-builder/-builder.md
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient.Builder/build/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-client/-builder/build.md
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient.Companion///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-client/-companion/index.md
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient.Companion/instance/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-client/-companion/instance.md
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-client/index.md
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient/descriptionResponse/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-client/description-response.md
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient/pokemonSpriteResponse/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-client/pokemon-sprite-response.md
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient/searchPokemonShakespeareDescription/#kotlin.String/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-client/search-pokemon-shakespeare-description.md
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient/searchPokemonSprite/#kotlin.String/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.client/-pokemon-client/search-pokemon-sprite.md
+$dokka.location:com.shrek.pokemonlibrary.network.api////PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.api//TIMEOUT/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-t-i-m-e-o-u-t.md
+$dokka.location:com.shrek.pokemonlibrary.network.api//apiCall/#kotlin.coroutines.SuspendFunction0[retrofit2.Response[TypeParam(bounds=[kotlin.Any])]]/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/api-call.md
+$dokka.location:com.shrek.pokemonlibrary.network.api//create/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/create.md
+$dokka.location:com.shrek.pokemonlibrary.network.api//retrofit/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/retrofit.md
+$dokka.location:com.shrek.pokemonlibrary.network.api//retrofitGson/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/retrofit-gson.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult.Companion///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/-companion/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult.Companion/error/#kotlin.Throwable?#kotlin.String?/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/-companion/error.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult.Companion/success/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/-companion/success.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/ApiResult/#com.shrek.pokemonlibrary.network.api.ResultState#kotlin.String?#kotlin.Throwable?#TypeParam(bounds=[kotlin.Any?])?/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/-api-result.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/error/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/error.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/error/#kotlin.Throwable?#kotlin.String?/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/error.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/errorMessage/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/error-message.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/errorMessage/#kotlin.String/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/error-message.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/isError/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/is-error.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/isInProgress/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/is-in-progress.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/isSuccess/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/is-success.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/result/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/result.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/resultState/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/result-state.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult/success/#TypeParam(bounds=[kotlin.Any?])/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-api-result/success.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ResultState.ERROR///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-result-state/-e-r-r-o-r/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ResultState.IN_PROGRESS///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-result-state/-i-n_-p-r-o-g-r-e-s-s/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ResultState.SUCCESS///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-result-state/-s-u-c-c-e-s-s/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.api/ResultState///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.api/-result-state/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models////PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models//toPokemonApiResult/com.shrek.pokemonlibrary.network.api.ApiResult[TypeParam(bounds=[kotlin.Any?])]#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/to-pokemon-api-result.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models//toPokemonError/kotlin.Throwable#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/to-pokemon-error.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/ApiError.ErrorProp///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-api-error/-error-prop/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/ApiError.ErrorProp/ErrorProp/#kotlin.String?#kotlin.Int?/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-api-error/-error-prop/-error-prop.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/ApiError.ErrorProp/code/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-api-error/-error-prop/code.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/ApiError.ErrorProp/message/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-api-error/-error-prop/message.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/ApiError///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-api-error/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/ApiError/ApiError/#com.shrek.pokemonlibrary.network.data.models.ApiError.ErrorProp/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-api-error/-api-error.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/ApiError/error/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-api-error/error.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonApiResult///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-api-result/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonApiResult/PokemonApiResult/#com.shrek.pokemonlibrary.network.api.ResultState#com.shrek.pokemonlibrary.network.data.models.PokemonError?#TypeParam(bounds=[kotlin.Any?])?/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-api-result/-pokemon-api-result.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonApiResult/error/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-api-result/error.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonApiResult/isError/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-api-result/is-error.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonApiResult/isInProgress/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-api-result/is-in-progress.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonApiResult/isSuccess/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-api-result/is-success.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonApiResult/isSuccessNonNull/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-api-result/is-success-non-null.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonApiResult/result/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-api-result/result.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonApiResult/resultState/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-api-result/result-state.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonError///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-error/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonError/PokemonError/#kotlin.String?#kotlin.Int?/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-error/-pokemon-error.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonError/errorMessage/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-error/error-message.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonError/httpFailureCode/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-error/http-failure-code.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonShakespeareDescription///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-shakespeare-description/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonShakespeareDescription/PokemonShakespeareDescription/#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-shakespeare-description/-pokemon-shakespeare-description.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonShakespeareDescription/description/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-shakespeare-description/description.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonShakespeareDescription/imgUrl/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-shakespeare-description/img-url.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonShakespeareDescription/name/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-shakespeare-description/name.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonSprite///PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-sprite/index.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonSprite/PokemonSprite/#kotlin.String/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-sprite/-pokemon-sprite.md
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/PokemonSprite/imgUrl/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.network.data.models/-pokemon-sprite/img-url.md
+$dokka.location:com.shrek.pokemonlibrary.ui.theme////PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.ui.theme/index.md
+$dokka.location:com.shrek.pokemonlibrary.ui.theme//PokemonLibraryTheme/#kotlin.Boolean#kotlin.Function0[kotlin.Unit]/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.ui.theme/-pokemon-library-theme.md
+$dokka.location:com.shrek.pokemonlibrary.ui.theme//Purple200/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.ui.theme/-purple200.md
+$dokka.location:com.shrek.pokemonlibrary.ui.theme//Purple500/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.ui.theme/-purple500.md
+$dokka.location:com.shrek.pokemonlibrary.ui.theme//Purple700/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.ui.theme/-purple700.md
+$dokka.location:com.shrek.pokemonlibrary.ui.theme//Shapes/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.ui.theme/-shapes.md
+$dokka.location:com.shrek.pokemonlibrary.ui.theme//Teal200/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.ui.theme/-teal200.md
+$dokka.location:com.shrek.pokemonlibrary.ui.theme//Typography/#/PointingToDeclaration/pokemon-library/com.shrek.pokemonlibrary.ui.theme/-typography.md
+com.shrek.pokemonlibrary.client
+com.shrek.pokemonlibrary.network.api
+com.shrek.pokemonlibrary.network.data.models
+com.shrek.pokemonlibrary.ui.theme
+
