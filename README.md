@@ -1,7 +1,7 @@
 # PokemonApplication
 This project contains `pokemonLibrary` which is a sdk that helps you search for pokemon names, get their image and description in a Shakespeare-esque translation.
 
-## How to use
+## How to add pokemonLibrary to your project
 Add `jitpack` dependency to your project-level build.gradle file
 ```
 allprojects {
@@ -20,4 +20,18 @@ dependencies {
 ```
 To find our the latest release version please check out the [Releases section](https://github.com/kumarshreyak/PokemonApplication/releases) on this repo.
 
-Javadoc for exposed data classes / methods -
+## Usage
+Refer [PokemonClient](https://github.com/kumarshreyak/PokemonApplication/blob/master/gfmPartial/pokemon-library/com.shrek.pokemonlibrary.client/index.md) for detailed documentation
+
+Example - 
+All UI in library is made in Jetpack Compose ❤️ 🚀
+
+If you already use compose you can simple include the UI in your composable function, just pass the updated search text in the parameters, like so -
+```
+@Composable
+fun YourComposableFunction() {
+	...
+	PokemonSpriteUI(searchText)
+	...
+}
+```
