@@ -26,12 +26,27 @@ Refer [PokemonClient](https://github.com/kumarshreyak/PokemonApplication/blob/ma
 Example - 
 All UI in library is made in Jetpack Compose ❤️ 🚀
 
-If you already use compose you can simple include the UI in your composable function, just pass the updated search text in the parameters, like so -
+If you already use compose you can simple include the UI in your composable function, just pass the updated search text in the parameters -
 ```
 @Composable
 fun YourComposableFunction() {
 	...
 	PokemonSpriteUI(searchText)
 	...
+}
+```
+
+If you want to use a Compose in your XML file, you can add this to your layout file:
+```
+<androidx.compose.ui.platform.ComposeView
+    android:id="@+id/my_composable"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
+```
+
+Then just set pokemonLibrary's composable on this view -
+```
+findViewById<ComposeView>(R.id.my_composable).setContent {
+	PokemonSpriteUI(searchText)
 }
 ```
