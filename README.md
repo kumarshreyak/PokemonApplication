@@ -18,6 +18,6 @@ dependencies {
     implementation 'com.github.kumarshreyak.PokemonApplication:pokemonlibrary-release:1.0.2'
 }
 ```
-To find our the latest release version please check out the `Releases` section on this repo.
+To find our the latest release version please check out the [Releases section](https://github.com/kumarshreyak/PokemonApplication/releases) on this repo.
 
 Javadoc for exposed data classes / methods -
