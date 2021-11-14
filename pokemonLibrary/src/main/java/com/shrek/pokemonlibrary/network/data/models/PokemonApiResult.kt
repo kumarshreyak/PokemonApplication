@@ -29,7 +29,7 @@ data class PokemonError(
 
 fun <T> ApiResult<T>.toPokemonApiResult() : PokemonApiResult<T> {
     val pokemonError = if(error is ApiError?)
-        PokemonError(error?.error?.message, error?.error?.code)
+        error?.toPokemonError()
     else
         PokemonError(error?.message)
 

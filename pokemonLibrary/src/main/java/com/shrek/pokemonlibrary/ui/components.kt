@@ -23,9 +23,9 @@ import com.shrek.pokemonlibrary.client.PokemonClient
 
 
 @Composable
-internal fun NoResultsText(searchText: String? = null) {
+internal fun NoResultsText(searchText: String? = null, modifier: Modifier? = null) {
     Text(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier ?: Modifier.fillMaxWidth(),
         text = stringResource(id = R.string.no_results, searchText ?: "your search"),
         color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
         style = MaterialTheme.typography.subtitle1,
@@ -33,12 +33,12 @@ internal fun NoResultsText(searchText: String? = null) {
 }
 
 @Composable
-internal fun ShowRetryScreen(message: String?) {
+internal fun ShowRetryScreen(message: String?, modifier: Modifier? = null) {
     Text(
         text = if(message.isNullOrBlank()) stringResource(id = R.string.generic_error) else message,
         color = MaterialTheme.colors.onSurface.copy(alpha = ContentAlpha.medium),
         style = MaterialTheme.typography.subtitle1,
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier ?: Modifier.fillMaxWidth()
     )
 }
 
@@ -50,7 +50,7 @@ internal fun PokemonSpriteImage(
     Image(
         painter = rememberImagePainter(data = imageUrl),
         contentDescription = stringResource(R.string.content_description_pokemon_image),
-        modifier = modifier.wrapContentSize().testTag("PokemonSpriteImage")
+        modifier = modifier.testTag("PokemonSpriteImage")
     )
 }
 
@@ -62,7 +62,7 @@ internal fun PokemonDescriptionText(
 ) {
     Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            modifier = Modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth()
                 .align(alignment = Alignment.CenterHorizontally)
                 .testTag("PokemonDescriptionText"),
             text = description,

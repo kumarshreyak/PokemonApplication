@@ -67,13 +67,26 @@ fun Content(
 
             TextFieldSection(onSearch = onSearch)
 
-            Spacer(modifier = Modifier.size(16.dp))
+            Column(modifier = Modifier.fillMaxWidth().align(Alignment.CenterHorizontally)) {
+                Spacer(modifier = Modifier.size(56.dp))
 
-            PokemonSpriteUI(searchText = searchText)
+                PokemonSpriteUI(
+                    searchText = searchText,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally),
+                    imageModifier = Modifier
+                        .size(200.dp)
+                        .align(Alignment.CenterHorizontally)
+                )
 
-            Spacer(modifier = Modifier.size(16.dp))
+                Spacer(modifier = Modifier.size(16.dp))
 
-            PokemonShakespeareDescriptionUI(searchText = searchText)
+                PokemonShakespeareDescriptionUI(
+                    searchText = searchText,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                )
+            }
         }
     }
 }

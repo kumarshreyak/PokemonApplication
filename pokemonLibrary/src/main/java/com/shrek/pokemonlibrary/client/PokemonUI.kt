@@ -1,12 +1,15 @@
 package com.shrek.pokemonlibrary.client
 
 import android.util.Log
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
 import com.shrek.pokemonlibrary.ui.NoResultsText
 import com.shrek.pokemonlibrary.ui.PokemonDescriptionText
 import com.shrek.pokemonlibrary.ui.PokemonSpriteImage
@@ -23,6 +26,8 @@ fun PokemonSpriteUI(
     searchText: String?,
     showProgressLoader: Boolean = true,
     showSearchFailure: Boolean = true,
+    modifier: Modifier? = null,
+    imageModifier: Modifier? = null,
 ) {
     val image by PokemonClient.instance().pokemonSpriteResponse.observeAsState()
 
@@ -36,19 +41,31 @@ fun PokemonSpriteUI(
         image == null || searchText.isNullOrBlank() -> Unit
         image!!.isInProgress() -> {
             Log.d("PokemonLogs", "CircularProgressIndicator: searchText = $searchText")
-            if(showProgressLoader) CircularProgressIndicator(color = MaterialTheme.colors.primary)
+            if(showProgressLoader) CircularProgressIndicator(
+                color = MaterialTheme.colors.primary,
+                modifier = modifier ?: Modifier
+            )
         }
         image!!.isSuccess() -> {
             Log.d("PokemonLogs", "PokemonSpriteResult: searchText = $searchText")
-            PokemonSpriteImage(imageUrl = image!!.result!!.imgUrl)
+            PokemonSpriteImage(
+                imageUrl = image!!.result!!.imgUrl,
+                modifier = imageModifier ?: Modifier.size(200.dp)
+            )
         }
         image!!.isError() -> {
             if(image!!.error?.httpFailureCode == 404) {
                 Log.d("PokemonLogs", "NoResultsText: searchText = $searchText")
-                if(showSearchFailure) NoResultsText(searchText = searchText)
+                if(showSearchFailure) NoResultsText(
+                    searchText = searchText,
+                    modifier = modifier ?: Modifier
+                )
             } else {
                 Log.d("PokemonLogs", "ShowRetryScreen: searchText = $searchText")
-                if(showSearchFailure) ShowRetryScreen(message = image!!.error?.errorMessage)
+                if(showSearchFailure) ShowRetryScreen(
+                    message = image!!.error?.errorMessage,
+                    modifier = modifier ?: Modifier
+                )
             }
         }
     }
@@ -65,6 +82,7 @@ fun PokemonShakespeareDescriptionUI(
     searchText: String?,
     showProgressLoader: Boolean = true,
     showSearchFailure: Boolean = true,
+    modifier: Modifier? = null,
 ) {
     val description by PokemonClient.instance().descriptionResponse.observeAsState()
 
@@ -77,19 +95,31 @@ fun PokemonShakespeareDescriptionUI(
         description == null || searchText.isNullOrBlank() -> Unit
         description!!.isInProgress() -> {
             Log.d("PokemonLogs", "CircularProgressIndicator: searchText = $searchText")
-            if(showProgressLoader) CircularProgressIndicator(color = MaterialTheme.colors.primary)
+            if(showProgressLoader) CircularProgressIndicator(
+                color = MaterialTheme.colors.primary,
+                modifier = modifier ?: Modifier
+            )
         }
         description!!.isSuccess() -> {
             Log.d("PokemonLogs", "PokemonSpriteResult: searchText = $searchText")
-            PokemonDescriptionText(description = description!!.result!!)
+            PokemonDescriptionText(
+                description = description!!.result!!,
+                modifier = modifier ?: Modifier
+            )
         }
         description!!.isError() -> {
             if(description!!.error?.httpFailureCode == 404) {
                 Log.d("PokemonLogs", "NoResultsText: searchText = $searchText")
-                if(showSearchFailure) NoResultsText(searchText = searchText)
+                if(showSearchFailure) NoResultsText(
+                    searchText = searchText,
+                    modifier = modifier ?: Modifier
+                )
             } else {
                 Log.d("PokemonLogs", "ShowRetryScreen: searchText = $searchText")
-                if(showSearchFailure) ShowRetryScreen(message = description!!.error?.errorMessage)
+                if(showSearchFailure) ShowRetryScreen(
+                    message = description!!.error?.errorMessage,
+                    modifier = modifier ?: Modifier
+                )
             }
         }
     }
