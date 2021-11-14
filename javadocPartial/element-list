@@ -1,0 +1,11 @@
+$dokka.format:javadoc-v1
+$dokka.linkExtension:html
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient.Builder///PointingToDeclaration/com/shrek/pokemonlibrary/client/PokemonClient.Builder.html
+$dokka.location:com.shrek.pokemonlibrary.client/PokemonClient.Companion///PointingToDeclaration/com/shrek/pokemonlibrary/client/PokemonClient.Companion.html
+$dokka.location:com.shrek.pokemonlibrary.network.api/ApiResult.Companion///PointingToDeclaration/com/shrek/pokemonlibrary/network/api/ApiResult.Companion.html
+$dokka.location:com.shrek.pokemonlibrary.network.data.models/ApiError.ErrorProp///PointingToDeclaration/com/shrek/pokemonlibrary/network/data/models/ApiError.ErrorProp.html
+com.shrek.pokemonlibrary.client
+com.shrek.pokemonlibrary.network.api
+com.shrek.pokemonlibrary.network.data.models
+com.shrek.pokemonlibrary.ui.theme
+
