@@ -3,7 +3,7 @@ package com.shrek.pokemonlibrary.network.data.models
 data class ApiError(val error: ErrorProp) : Throwable() {
     class ErrorProp(
         val message: String?,
-        var code: Int?
+        var code: Int? = null,
     )
 }
 

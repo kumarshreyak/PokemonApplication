@@ -14,7 +14,7 @@ internal suspend fun fetchPokemonSprite(pokemonName: String) : ApiResult<Pokemon
                 response.success(result = PokemonSprite(imgUrl = imgUrl))
             } else {
                 response.error(
-                    t = Throwable("Species/Image of pokemon not found"),
+                    t = ApiError(ApiError.ErrorProp("Species/Image of pokemon not found")),
                     message = "Species/Image of pokemon not found"
                 )
             }
@@ -38,7 +38,7 @@ internal suspend fun fetchPokemonShakespeareDescription(species: String) : ApiRe
                 return fetchShakespeareDescription(text = englishDescription)
             } else {
                 response.error(
-                    t = Throwable("No description found for Pokemon"),
+                    t = ApiError(ApiError.ErrorProp("No description found for Pokemon")),
                     message = "No description found for Pokemon"
                 )
             }
@@ -60,14 +60,14 @@ internal suspend fun fetchShakespeareDescription(text: String) : ApiResult<Strin
             val translatedText = response.result?.contents?.translated
             return if(translatedText.isNullOrBlank()) {
                 finalResponse.error(
-                    t = Throwable("No translation found for description of PokemonShakespeareDescription"),
+                    t = ApiError(ApiError.ErrorProp("No translation found for description of PokemonShakespeareDescription")),
                     message = "No translation found for description of PokemonShakespeareDescription"
                 )
             } else {
                 finalResponse.success(translatedText)
             }
         }
-        response.isError() -> return finalResponse.error(Throwable(response.error), response.errorMessage)
+        response.isError() -> return finalResponse.error(response.error, response.errorMessage)
         else -> Unit
     }
     return finalResponse
