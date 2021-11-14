@@ -57,7 +57,7 @@ afterEvaluate {
                 // You can then customize attributes of the publication as shown below.
                 groupId = 'com.shrek'
                 artifactId = 'pokemonlibrary-release'
-                version = '1.0.1'
+                version = '1.0.3'
             }
             // Creates a Maven publication called “debug”.
             debug(MavenPublication) {
@@ -66,7 +66,7 @@ afterEvaluate {
 
                 groupId = 'com.shrek'
                 artifactId = 'pokemonlibrary-debug'
-                version = '1.0.1'
+                version = '1.0.3'
             }
         }
     }
